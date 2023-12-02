@@ -6,19 +6,19 @@ module Buzzer (
 output wire speaker // Buzzer output signal
  );
 
- wire [31:0] notes [7:0];
+ wire [31:0] notes [6:0];
  reg [31:0] counter ;
  reg pwm;
  // Frequencies of do , re , mi , fa , so , la , si
  // Obtain the ratio of how long the buzzer should be
 //active in one second
- assign notes [1]=381680;
- assign notes [2]=340136;
- assign notes [3]=303030;
- assign notes [4]=285714;
- assign notes [5]=255102;
- assign notes [6]=227273;
- assign notes [7]=202429;
+ assign notes [0]=381680;
+ assign notes [1]=340136;
+ assign notes [2]=303030;
+ assign notes [3]=285714;
+ assign notes [4]=255102;
+ assign notes [5]=227273;
+ assign notes [6]=202429;
  initial
  begin
  pwm =0;
