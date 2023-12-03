@@ -1,8 +1,8 @@
 module MiniPiano(
     input wire clk,
-    input wire [7:0] keys,
+    input wire [6:0] keys,
     output wire speaker,
-    output [7:0] Led
+    output [6:0] Led
 );
 
     wire [3:0] note;
