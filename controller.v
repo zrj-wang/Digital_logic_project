@@ -1,6 +1,5 @@
 // Controller module for managing the keys and notes
-·include "parar.v"
-
+`include "para.v"
 module Controller(
     input wire clk,
     input wire [6:0] keys,
@@ -23,7 +22,7 @@ module Controller(
                 
             end
             mode_auto: begin
-                note_out <= note_auto;
+                note_out <= note_au
             end
             mode_learn: begin
                 

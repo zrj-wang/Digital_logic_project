@@ -1,10 +1,9 @@
-·include "parar.v"
+`include "para.v"
 module Lib(
     input wire clk, // Clock signal
     input wire [1:0] song_select, // 
     output reg [3:0] current_note // out_put to buzzer
 );
-
 
 wire [3:0] twinkle_twinkle[0:27];
     assign  twinkle_twinkle[0]=t0;
@@ -35,28 +34,5 @@ wire [3:0] twinkle_twinkle[0:27];
     assign  twinkle_twinkle[25]=t25;
     assign  twinkle_twinkle[26]=t26;
     assign  twinkle_twinkle[27]=t27;
-
-
-
-
-integer play_position = 0;
-
-integer note_duration = 500000; // 0.5s
-integer note_counter = 0;
-
-always @(posedge clk) begin
-    if (note_counter < note_duration) begin
-        // continue playing the current note
-        note_counter = note_counter + 1;
-    end else begin
-        // move to the next note
-        note_counter = 0;
-        play_position = play_position + 1;
-        if (play_position >= 27) //
-            play_position = 0; // begin from the start
-    end
-
-    current_note <= twinkle_twinkle[play_position];
-end
 
 endmodule

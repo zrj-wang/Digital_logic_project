@@ -7,7 +7,7 @@ module MiniPiano(
 );
 
     wire [3:0] note;
-
+    
     // Instantiate the Controller
     Controller controller_inst(
         .clk(clk),
