@@ -2,6 +2,7 @@ module MiniPiano(
     input wire clk,
     input wire [6:0] keys,
     output wire speaker,
+    input wire [1:0] song_select, //select song, next or previous
     output [6:0] Led
 );
 
@@ -14,6 +15,7 @@ module MiniPiano(
         .note_out(note),
         .led_out(leds)
     );
+    
 
     // Instantiate the Buzzer
     Buzzer buzzer_inst(
