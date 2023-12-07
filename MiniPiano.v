@@ -1,8 +1,10 @@
+
 module MiniPiano(
     input wire clk,
     input wire [6:0] keys,
     output wire speaker,
     input wire [1:0] song_select, //select song, next or previous
+    input wire [2:0] mode,
     output [6:0] Led
 );
 
@@ -13,6 +15,7 @@ module MiniPiano(
         .clk(clk),
         .keys(keys),
         .note_out(note),
+        .mode(mode),
         .led_out(leds)
     );
     
@@ -26,7 +29,6 @@ module MiniPiano(
 
     // Instantiate the Led module
     Led led_inst(
-        .clk(clk),
         .leds(leds)
         // Connect other necessary ports
     );
