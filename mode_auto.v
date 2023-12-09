@@ -6,7 +6,7 @@ module mode_auto(
     output reg [6:0] led_out
 
 );
- parameter second = 70000000, song_time=56,music0=4'b0000,
+ parameter second = 10000000, song_time=56,music0=4'b0000,
  music1=4'b0001, music2=4'b0010,music3=4'b0011,music4=4'b0100,music5=4'b0101,
  music6=4'b0110,music7=4'b0111,music9=4'b1111,
  led1=7'b0000001,led2=7'b0000010,led3=7'b0000100,led4=7'b0001000,led5=7'b0010000,
@@ -71,8 +71,9 @@ endgenerate
 
 //play song
 integer play_position = 0;
-
 integer note_counter = 0;
+
+integer time_mul = 1;
 
 //play song logic
 always @(posedge clk, negedge reset) 
