@@ -57,7 +57,7 @@ always @(posedge clk) begin
         music5: led_out <= led5;
         music6: led_out <= led6;
         music7: led_out <= led7;
-        default: led_out <= led8; // 如果没有匹配的音符
+        default: led_out <= led8; //
     endcase
 
     note_to_play <= song[play_position];

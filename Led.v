@@ -1,9 +1,9 @@
 module Led(
-    input wire [6:0] leds, // 输入信号，每一位控制一个LED
-    output wire [6:0] led_output // LED输出信号
+    input wire [6:0] leds, // �����źţ�ÿһλ����һ��LED
+    output wire [6:0] led_output // LED����ź�
 );
 
-    // 直接将输入信号映射到输出
+    // ֱ�ӽ������ź�ӳ�䵽���
     assign led_output = leds;
 
 endmodule

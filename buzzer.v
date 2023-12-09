@@ -1,7 +1,7 @@
 module Buzzer (
  input wire clk , // Clock signal
  input wire [3:0] note , // Note ( Input 1 outputs
- //signal for ’do ,’ 2 for ’re ,’ 3 for ’mi ,’ 4,
+ //signal for 'do ,' 2 for 're ,' 3 for 'mi ,' 4,
 //and so on)
 output wire speaker // Buzzer output signal
  );
