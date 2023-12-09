@@ -15,6 +15,16 @@ module Controller(
         .note_to_play(note_auto),
         .led_out(led_auto)
     );
+//   // Learn mode wires
+//    wire [3:0] note_learn;
+//    wire [6:0] led_learn;
+    
+//    mode_learn learn_inst(
+//        .clk(clk),
+//        .switches(keys),
+//        .note_to_play(note_learn),
+//        .led_out(led_learn)
+//    );
 
 
     always @(posedge clk) begin
@@ -27,6 +37,9 @@ module Controller(
                 led_out <= led_auto;
             end
             mode_learn: begin
+//                note_out <= note_learn;
+//                led_out <= led_learn;
+               
                 
             end
             default: begin
