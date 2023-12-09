@@ -4,15 +4,15 @@ module mode_auto(
     output reg [3:0] note_to_play, // out_put to buzzer
     output reg [6:0] led_out
 );
- parameter Half_second = 50000000, song_time=28,
+ parameter second = 70000000, song_time=61,music0=4'b0000,
  music1=4'b0001, music2=4'b0010,music3=4'b0011,music4=4'b0100,music5=4'b0101,music6=4'b0110,music7=4'b0111,
  led1=7'b0000001,led2=7'b0000010,led3=7'b0000100,led4=7'b0001000,led5=7'b0010000,
  led6=7'b0100000,led7=7'b1000000,led8=7'b0000000;
 // only seven now,but not enough
 
 
- wire [3:0] song[0:27];
-wire [111:0] song_packed;
+ wire [3:0] song[song_time-1:0];
+wire [song_time*4-1:0] song_packed;
 
 
 Lib lib_inst(
@@ -36,10 +36,9 @@ integer play_position = 0;
 
 integer note_counter = 0;
 
-localparam halfSecond=Half_second;
 
 always @(posedge clk) begin
-    if (note_counter < halfSecond ) begin
+    if (note_counter < second ) begin
         // continue playing the current note
         note_counter <= note_counter + 1;
     end else begin
