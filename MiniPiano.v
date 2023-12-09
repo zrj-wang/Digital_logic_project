@@ -1,9 +1,13 @@
+
 module MiniPiano(
     input wire clk,
-    input wire [6:0] keys,
+    input wire [6:0] keys,// 7 keys for piano
+    input wire reset,
     output wire speaker,
     input wire [1:0] song_select, //select song, next or previous
-    input wire [2:0] mode,
+
+    input wire [2:0] mode,    //  mode 100 free ; 010 auto; 001 learn
+    input wire [1:0]octave, //choose the proper octave
     output [6:0] led
 );
 
@@ -14,7 +18,9 @@ module MiniPiano(
         .clk(clk),
         .keys(keys),
         .note_out(note),
+        .reset(reset),
         .mode(mode),
+        .song_select(song_select),
         .led_out(led)
     );
     
@@ -23,7 +29,8 @@ module MiniPiano(
     Buzzer buzzer_inst(
         .clk(clk),
         .note(note),
-        .speaker(speaker)
+        .speaker(speaker),
+        .octave(octave)
     );
 
     // Instantiate the Led module
