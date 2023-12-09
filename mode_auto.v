@@ -6,38 +6,41 @@ module mode_auto(
     output reg [6:0] led_out
 
 );
- parameter second = 70000000, song_time=61,music0=4'b0000,
+ parameter second = 70000000, song_time=56,music0=4'b0000,
  music1=4'b0001, music2=4'b0010,music3=4'b0011,music4=4'b0100,music5=4'b0101,
- music6=4'b0110,music7=4'b0111,mucic9=4'b1111,
+ music6=4'b0110,music7=4'b0111,music9=4'b1111,
  led1=7'b0000001,led2=7'b0000010,led3=7'b0000100,led4=7'b0001000,led5=7'b0010000,
  led6=7'b0100000,led7=7'b1000000,led8=7'b0000000;
 // only seven now,but not enough
 parameter final_song=2'b10, begin_song=2'b00, mid_song=2'b01;
 
 
-
 wire [3:0] song[song_time-1:0];
 wire [song_time*4-1:0] song_packed;
 reg [1:0] song_num=2'b00; // on behalf of song 
-
+wire [3:0] time_continue[song_time-1:0];
 
 //choose song logic
-  always @(*) begin
+  always @(posedge clk) begin
     if(song_select[0] == 1'b1) begin
       if(song_num==final_song) begin
-        song_num=begin_song;
+        song_num<=begin_song;
       end
       else begin
-        song_num=song_num+1;
+        song_num<=song_num+1;
       end
+        play_position <= 0;
+        note_counter <= 0;
     end
     else if(song_select[1]==1'b1) begin
       if(song_num==begin_song) begin
-        song_num=final_song;
+        song_num<=final_song;
       end
       else begin
-        song_num=song_num-1;
+        song_num<=song_num-1;
       end
+        play_position <= 0;
+        note_counter <= 0;
     end
   end
 
@@ -45,7 +48,8 @@ reg [1:0] song_num=2'b00; // on behalf of song
 Lib lib_inst(
     .clk(clk),
     .song_packed(song_packed),
-    .song_num(song_num)
+    .song_num(song_num),
+    .time_continue(time_continue)
 
 );
 
@@ -57,6 +61,13 @@ generate
     end
 endgenerate
 
+
+//upack time
+generate
+    for (i = 0; i < song_time; i = i + 1) begin : unpack
+        assign time_continue[i] = time_continue[(4*i)+3 : 4*i];
+    end
+endgenerate
 
 //play song
 integer play_position = 0;
@@ -91,7 +102,7 @@ begin
         music5: led_out <= led5;
         music6: led_out <= led6;
         music7: led_out <= led7;
-        mucic9:play_position <= 0; // begin from the start
+        music9:play_position <= 0; // begin from the start
         default: led_out <= led8; // 
     endcase
 
