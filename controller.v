@@ -1,11 +1,12 @@
 module Controller(
     input wire clk,
     input wire [6:0] keys,
-    input wire [2:0] mode,//  mode 100 free ; 010 auto; 001 learn
+    input wire [2:0] mode,//  mode 100 free ; 010 auto; 001 learn //check constrain
     input wire reset,
     input wire [1:0] song_select,
     output reg [3:0] note_out,
-    output reg [6:0] led_out 
+    output reg [6:0] led_out ,
+    output reg [1:0] octave_auto
 );
  parameter mode_free=3'b100, mode_auto=3'b010, mode_learn=3'b001;
 
@@ -17,7 +18,8 @@ module Controller(
         .reset(reset),
         .note_to_play(note_auto),
         .song_select(song_select),
-        .led_out(led_auto)
+        .led_out(led_auto),
+        .octave_auto(octave_auto)
     );
     // Learn mode wires
     wire [3:0] note_learn;

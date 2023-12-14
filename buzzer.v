@@ -3,17 +3,41 @@ module Buzzer (
  input wire clk , // Clock signal
  input wire [3:0] note , // Note ( Input 1 outputs a signal for 'do , ' 2 for 're , ' 3 for 'mi , ' 4 ,and so on)
  output wire speaker , // Buzzer output signal
- input wire[1:0] octave//choose octave :01 lower octave; 10 higher ocative; elese maintain previous octave
+ input wire[2:0] mode, // Reset signal
+ input wire[1:0] octave,//choose octave :01 lower octave; 10 higher ocative; elese maintain previous octave
+ input wire[1:0] octave_auto
  ) ;
+
  
- reg muti;
-always@(*)begin
+ real muti;
+
+
+always @(*) begin
+case (mode)
+3'b010:begin
+case (octave_auto)
+2'b01:muti=2;
+2'b10:muti=0.5;
+default:muti=1;
+endcase
+end
+
+3'b100:begin
 case (octave)
 2'b01:muti=2;
 2'b10:muti=0.5;
 default:muti=1;
 endcase
 end
+
+default:muti=1;
+
+endcase
+    
+end
+
+
+
  wire [31:0] notes [7:0];
  reg [31:0] counter ;
  reg pwm ;

@@ -1,7 +1,7 @@
 module mode_learn(
     input wire clk, // Clock signal
     input wire [1:0] song_select, // choose song
-    input wire [6:0] switches, // 7¸ö¿ª¹ØÊäÈë
+    input wire [6:0] switches, // 7ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     output reg [3:0] note_to_play, // out_put to buzzer
     output reg [6:0] led_out
 );
@@ -34,23 +34,23 @@ module mode_learn(
 
 ////play song
 //integer play_position = 0;
-//reg note_played; // ±ê¼ÇÊÇ·ñÒÑ¶Ôµ±Ç°Òô·û×÷³ö·´Ó¦
+//reg note_played; // ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½Ñ¶Ôµï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦
 
 //initial begin
-//    note_played = 1'b1; // ³õÊ¼ÉèÖÃÎª1£¬ÒÔ±ã´ÓµÚÒ»¸öÒô·û¿ªÊ¼
+//    note_played = 1'b1; // ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Îª1ï¿½ï¿½ï¿½Ô±ï¿½Óµï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼
 //end
 
 //always @(posedge clk) begin
-//    // ¼ì²éÊÇ·ñÐèÒªÒÆ¶¯µ½ÏÂÒ»¸öÒô·û
+//    // ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Òªï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //    if (note_played && (play_position < song_time-1)) begin
 //        play_position <= play_position + 1;
-//        note_played <= 1'b0; // ÖØÖÃ±êÖ¾
+//        note_played <= 1'b0; // ï¿½ï¿½ï¿½Ã±ï¿½Ö¾
 //    end else if (note_played) begin
-//        play_position <= 0; // ´ÓÍ·¿ªÊ¼
-//        note_played <= 1'b0; // ÖØÖÃ±êÖ¾
+//        play_position <= 0; // ï¿½ï¿½Í·ï¿½ï¿½Ê¼
+//        note_played <= 1'b0; // ï¿½ï¿½ï¿½Ã±ï¿½Ö¾
 //    end
 
-//    // ÉèÖÃLEDÊä³öºÍÒô·û
+//    // ï¿½ï¿½ï¿½ï¿½LEDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //    case (song[play_position])
 //        music1: led_out <= led1;
 //        music2: led_out <= led2;
@@ -59,13 +59,13 @@ module mode_learn(
 //        music5: led_out <= led5;
 //        music6: led_out <= led6;
 //        music7: led_out <= led7;
-//        default: led_out <= led8; // Èç¹ûÃ»ÓÐÆ¥ÅäµÄÒô·û
+//        default: led_out <= led8; // ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Æ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //    endcase
 //    note_to_play <= song[play_position];
 
-//    // ¼ì²éÊÇ·ñ´ò¿ªÁËÓëµ±Ç°Òô·ûÏàÓ¦µÄ¿ª¹Ø
+//    // ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ëµ±Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½Ä¿ï¿½ï¿½ï¿½
 //    if (switches[note_to_play-1] && note_to_play != 0) begin
-//        note_played <= 1'b1; // µ±ÓÃ»§´ò¿ª¿ª¹ØÊ±£¬ÉèÖÃ±êÖ¾
+//        note_played <= 1'b1; // ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ò¿ª¿ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ã±ï¿½Ö¾
 //    end
 //end
 

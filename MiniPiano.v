@@ -11,15 +11,16 @@ module MiniPiano(
 );
 
     wire [3:0] note;
+    wire[1:0] octave_auto;
     
     // Instantiate the Controller
     Controller controller_inst(
         .clk(clk),
         .keys(keys),
         .note_out(note),
-.reset(reset),
+        .reset(reset),
         .mode(mode),
-.song_select(song_select),
+        .song_select(song_select),
         .led_out(led)
     );
     
@@ -29,7 +30,9 @@ module MiniPiano(
         .clk(clk),
         .note(note),
         .speaker(speaker),
-        .octave(octave)
+        .octave(octave),
+        .octave_auto(octave_auto),
+        .mode(mode)
     );
 
     // Instantiate the Led module
