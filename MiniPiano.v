@@ -27,7 +27,7 @@ module MiniPiano(
     input wire reset,
     output wire speaker,
     input wire write_on,
-    input wire [1:0] song_select, //select song, next or previous
+    input wire [2:0] song_select, //select song, next or previous
     input wire [2:0] mode,    //  mode 100 free ; 010 auto; 001 learn
     input wire [1:0]octave, //choose the proper octave
     output wire [6:0] led, //control the led
