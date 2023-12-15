@@ -52,10 +52,9 @@ module Controller(
     mode_auto auto_inst(
     .clk(clk),
     .reset(reset),
-    .keys(keys),
     .song_select(song_select),
     .note_to_play(note_auto),
-    .octave(octave),
+    .led_out(led_auto),
     .octave_out(octave_auto),
     .num(num_auto)
     );
