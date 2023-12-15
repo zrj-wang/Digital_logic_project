@@ -11,27 +11,7 @@ module Buzzer (
  
 integer muti;
 
-always @(*) begin
-    case (mode)
-        3'b010: begin
-            case (octave_auto)
-                2'b01: muti = 2;   // 增加一倍频率
-                2'b10: muti = 1;   // 减半频率（通过跳过一半的计数来实现）
-                default: muti = 2; // 默认值
-            endcase
-        end
 
-        3'b100: begin
-            case (octave)
-                2'b01: muti = 2;   // 增加一倍频率
-                2'b10: muti = 1;   // 减半频率
-                default: muti = 2; // 默认值
-            endcase
-        end
-
-        default: muti = 2;
-    endcase
-end
 
 
 
@@ -55,10 +35,39 @@ end
  end
 
 
- always @(posedge clk) begin
-    if (counter < notes[note] || note == 1'b0) begin
-        if (muti == 1 || (muti == 2 && counter[0] == 1'b0)) begin
-            // 只在 muti 为 1 或 muti 为 2 且计数器为偶数时递增计数器
+
+// Set multiplier based on octave and mode
+always @(*) begin
+    case (mode)
+        3'b010: begin
+            case (octave_auto)
+                2'b01: muti = 2;   // Higher octave
+                2'b10: muti = 0;   // Lower octave
+                default: muti = 1; // Standard octave
+            endcase
+        end
+        3'b100: begin
+            case (octave)
+                2'b01: muti = 2;   // Higher octave
+                2'b10: muti = 0;   // Lower octave
+                default: muti = 1; // Standard octave
+            endcase
+        end
+        default: muti = 1; // Standard octave
+    endcase
+end
+
+
+// Control the buzzer output based on note and octave
+always @(posedge clk) begin
+    if (counter < notes[note] || note == 0) begin
+        if (muti == 0) begin
+            // For lower octave, count half the speed
+            if (counter[0] == 1'b0) begin
+                counter <= counter + 1;
+            end
+        end else begin
+            // For standard and higher octave, count normal speed
             counter <= counter + 1;
         end
     end else begin
@@ -66,5 +75,7 @@ end
         counter <= 0;
     end
 end
+
+
  assign speaker = pwm ; // Output a PWM signal to the buzzer
  endmodule

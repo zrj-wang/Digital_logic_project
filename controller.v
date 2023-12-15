@@ -36,7 +36,7 @@ module Controller(
     output wire [1:0] octave_auto
 );
  parameter mode_free=3'b100, mode_auto=3'b010, mode_learn=3'b001;
-wire [3:0] num_auto;
+    wire [3:0] num_auto;
     wire [3:0] note_auto;
     wire [6:0] led_auto;
     
