@@ -5,6 +5,22 @@ set_property IOSTANDARD LVCMOS33 [get_ports led]
 set_property IOSTANDARD LVCMOS33 [get_ports song_select]
 set_property IOSTANDARD LVCMOS33 [get_ports mode]
 set_property IOSTANDARD LVCMOS33 [get_ports reset]
+set_property IOSTANDARD LVCMOS33 [get_ports light_seg]
+set_property IOSTANDARD LVCMOS33 [get_ports seg_out]
+set_property IOSTANDARD LVCMOS33 [get_ports octave]//need to check
+
+
+set_property PACKAGE_PIN D4 [get_ports {seg_ctrl[6]}]
+set_property PACKAGE_PIN E3 [get_ports {seg_ctrl[5]}]
+set_property PACKAGE_PIN D3 [get_ports {seg_ctrl[4]}]
+set_property PACKAGE_PIN F4 [get_ports {seg_ctrl[3]}]
+set_property PACKAGE_PIN F3 [get_ports {seg_ctrl[2]}]
+set_property PACKAGE_PIN E2 [get_ports {seg_ctrl[1]}]
+set_property PACKAGE_PIN D2 [get_ports {seg_ctrl[0]}]
+
+set_property PACKAGE_PIN H2 [get_ports {seg_ctrl[7]}]
+
+set_property PACKAGE_PIN G6 [get_ports seg_out]
 
 
 set_property PACKAGE_PIN U4 [get_ports song_select[0]]
