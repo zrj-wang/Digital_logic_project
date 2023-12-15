@@ -1,0 +1,129 @@
+module writeToRam (
+ input wire clk,
+    input wire write_en,
+     input wire [6:0] keys,
+    input wire [1:0] data_in_octive,
+output reg [Note_WIDTH-1:0] ram1 [0:RAM_DEPTH-1],
+output reg [Time_WIDTH-1:0] ram2 [0:RAM_DEPTH-1],
+output reg [Octave_WIDTH-1:0] ram3 [0:RAM_DEPTH-1]
+);
+
+
+reg [ADDR_WIDTH-1:0] addr1 = 0;
+reg [ADDR_WIDTH-1:0] addr2 = 0;
+reg [ADDR_WIDTH-1:0] addr3 = 0;
+
+
+parameter Note_WIDTH = 4;  // 根据需要调整数据宽度
+parameter Time_WIDTH = 6; 
+parameter Octave_WIDTH = 3;  // 根据需要调整数据宽度
+parameter RAM_DEPTH = 1024; // RAM 深度
+parameter ADDR_WIDTH = 10;  // 地址宽度，用于遍历
+parameter N = 32;
+
+
+
+//将开关值换为node
+reg [3:0]note;
+always@(*)begin
+    case(keys)
+    7'b0000001:note=4'b0001;
+    7'b0000010:note=4'b0010;
+    7'b0000100:note=4'b0011;
+    7'b0001000:note=4'b0100;
+    7'b0010000:note=4'b0101;
+    7'b0100000:note=4'b0110;
+    7'b1000000:note=4'b0111;
+   default
+    note=4'b0000;
+endcase
+end
+//增加一个debounding方法去抗抖动,记录当前按键值
+reg [N-1:0] counter = 0;  // N 是计数器的位宽
+reg slow_clk = 0;
+parameter DIVIDE_VALUE=100000;//设置慢速时钟的频率为clk的十万分之一，也就是10Hz
+always @(posedge clk) begin
+    counter <= counter + 1;
+    if (counter == DIVIDE_VALUE) begin
+        slow_clk <= ~slow_clk;
+        counter <= 0;
+    end
+end
+
+//记录当前打开的开关值
+always @(posedge slow_clk) begin
+    
+    if (write_en) begin
+    // 更新开关状态
+    switch_last <= switch_state;
+    switch_state <= note; // 假设最低位为开关状态
+    
+    // 用条件语句模拟上升沿，当开关从关闭变为打开时记录数据
+    if (switch_state && !switch_last) begin
+        ram1[addr1]<=note;
+    end
+    // 用条件语句模拟下降沿，当开关关闭时准备记录下一个数据
+    else if (!switch_state && switch_last) begin
+            addr1 <= addr1 + 1;  
+         end
+
+    end
+
+end
+
+
+//写一个方法去计算持续时长：可以使用always加count
+
+parameter DATA_WIDTH = 8; // 假设数据宽度为 8 位
+reg [31:0] counter = 0;    // 计时器
+reg switch_state = 0;      // 当前开关状态
+reg switch_last = 0;       // 上一个时钟周期的开关状态
+
+
+
+always @(posedge clk) begin
+    if (write_en) begin
+    // 更新开关状态
+    switch_last <= switch_state;
+    switch_state <= note; // 假设最低位为开关状态
+    
+    // 用条件语句模拟上升沿，当开关从关闭变为打开时开始计时
+    if (switch_state && !switch_last) begin
+        counter <= 0; // 重置计数器
+    end
+    // 用条件语句模拟高电平状态，当开关处于打开状态时计时
+    else if (switch_state) begin
+        counter <= counter + 1;
+    end
+    // 用条件语句模拟下降沿，当开关关闭时停止计时并记录持续时间
+    else if (!switch_state && switch_last) begin
+            ram2[addr2] <= counter; // 更新持续时间
+            addr2 <= addr2 + 1;  
+         end
+
+    end
+end
+
+
+//写入音符八度
+//记录当前打开的开关值
+always @(posedge slow_clk) begin
+    
+    if (write_en) begin
+    // 更新开关状态
+    switch_last <= switch_state;
+    switch_state <= note; // 假设最低位为开关状态
+    
+    // 用条件语句模拟上升沿，当开关从关闭变为打开时记录数据
+    if (switch_state && !switch_last) begin
+        ram3[addr3]<=data_in_octive;
+    end
+    // 用条件语句模拟下降沿，当开关关闭时准备记录下一个数据
+    else if (!switch_state && switch_last) begin
+            addr3 <= addr3 + 1;  
+         end
+
+    end
+
+end
+endmodule

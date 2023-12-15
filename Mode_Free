@@ -1,0 +1,77 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 2023/12/15 19:58:59
+// Design Name: 
+// Module Name: Mode_Free
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module Mode_Free(
+ input wire clk,
+   input wire write_on,
+    input wire [6:0] keys,
+   input wire [1:0] octave,
+   output pwm
+    );
+    parameter Note_WIDTH = 4;  // 根据需要调整数据宽度
+    parameter Time_WIDTH = 6; 
+    parameter Octave_WIDTH = 3;  // 根据需要调整数据宽度
+    parameter RAM_DEPTH = 1024; // RAM 深度
+    parameter ADDR_WIDTH = 10;  // 地址宽度，用于遍历
+    
+reg [1:0] data_out_octave;
+   reg [Note_WIDTH-1:0] ram1 [0:RAM_DEPTH-1];
+   reg [Time_WIDTH-1:0] ram2 [0:RAM_DEPTH-1];
+   reg [Octave_WIDTH-1:0] ram3 [0:RAM_DEPTH-1];
+   
+   reg [ADDR_WIDTH-1:0] addr1 = 0;
+   reg [ADDR_WIDTH-1:0] addr2 = 0;
+   reg [ADDR_WIDTH-1:0] addr3 = 0;
+    
+    wire [Note_WIDTH-1:0] data_out_note;
+    wire [Time_WIDTH-1:0] data_out_time;
+    wire [ADDR_WIDTH-1:0] addr_write;
+    reg checkNote;
+    reg checkTime;
+     
+     writeToRam write_to_ram(
+     .clk(clk),
+     .write_on(write_on),
+     .keys(keys),
+     .data_in_octive(octave),
+     .data_out_note(data_out_note),
+     .data_out_time(data_out_time),
+     .checkNote(checkNote),
+     .checkTime(checkTime)
+     );
+     
+     
+     always @(posedge clk) begin
+          data_out_octave<=octave;
+     if(write_on)begin
+     if(checkNote==1 && checkTime==1)begin
+     ram1[addr_write] <= data_out_note;
+     ram2[addr_write] <= data_out_time;
+     ram3[addr_write] <= data_out_octave;
+             end
+           end      
+         end
+     
+     
+     
+     
+endmodule
