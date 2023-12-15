@@ -24,6 +24,7 @@
 
 module Controller(
     input wire clk,
+    input wire write_on,
     input wire [6:0] keys,
     input wire [2:0] mode,//  mode 100 free ; 010 auto; 001 learn //check constrain
     input wire reset,
@@ -37,6 +38,15 @@ module Controller(
 
     wire [3:0] note_auto;
     wire [6:0] led_auto;
+    
+    Mode_Free free_inst(
+    .clk(clk),
+    .write_on(write_on),
+    .keys(keys),
+    .octave(octave_auto)
+    );
+   
+   
 
     mode_auto auto_inst(
         .clk(clk),
@@ -75,4 +85,5 @@ module Controller(
         endcase
     end
 endmodule
+
 
