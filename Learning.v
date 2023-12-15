@@ -21,7 +21,7 @@
 
 
 module mode_learn(
-
+    input wire clk, // Clock signal
     input wire [1:0] song_select, // choose song
     input wire [6:0] switches, // 7个开关输入
     input wire reset, // Reset signal
@@ -112,8 +112,8 @@ endgenerate
 
 // Play song
 always @(posedge clk) begin
-        if (reset) begin
-            // 复位时将播放位置重置为0
+    if (reset) begin
+        // 复位时将播放位置重置为0
         play_position <= 0;
         // 将当前音符设置为 music0
         note_to_play <= music0;
@@ -139,8 +139,8 @@ always @(posedge clk) begin
                 music7: led_out <= led7;
                 music9:
                 begin
-            play_position <= 0;
-end // begin from the start
+                  play_position <= 0;
+                end // begin from the start
                 default: led_out <= led8; // 
             endcase
 
@@ -151,16 +151,16 @@ end // begin from the start
             // 可选择性地重置音符和LED输出以在音符之间关闭它们
             note_to_play <= music0;
             led_out <= 0;
-            end else if ((note_to_play == music0) && (!switches[0]&&!switches[1]&&!switches[2]&&!switches[3]&&!switches[4]&&!switches[5]&&!switches[6])) begin
-                // 对于 music0，检查是否所有开关都关闭以移动到下一个音符
+        end else if ((note_to_play == music0) && (!switches[0]&&!switches[1]&&!switches[2]&&!switches[3]&&!switches[4]&&!switches[5]&&!switches[6])) begin
+            // 对于 music0，检查是否所有开关都关闭以移动到下一个音符
             // 如果音符是 music0 且所有开关都关闭，移动到下一个音符
-                play_position <= (play_position < song_time - 1) ? play_position + 1 : 0;
-                // 为 music0 重置音符和LED输出
-                note_to_play <= music0;
-                led_out <= 0;
-            end
+            play_position <= (play_position < song_time - 1) ? play_position + 1 : 0;
+            // 为 music0 重置音符和LED输出
+            note_to_play <= music0;
+            led_out <= 0;
         end
     end
+end
 
 
 
