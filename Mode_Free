@@ -19,13 +19,18 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-
 module Mode_Free(
  input wire clk,
    input wire write_on,
+   input wire reset,
     input wire [6:0] keys,
+    input wire [2:0]song_select,
    input wire [1:0] octave,
-   output pwm
+   input wire reset,
+   input wire playRecord,
+   output reg[3:0] note_to_play,
+   output reg [1:0]octave_out
+   
     );
     parameter Note_WIDTH = 4;  // 根据需要调整数据宽度
     parameter Time_WIDTH = 6; 
@@ -70,8 +75,24 @@ reg [1:0] data_out_octave;
              end
            end      
          end
-     
-     
-     
-     
+         
+  reg i=0;
+  reg count1=0;
+always@(posedge clk )begin
+if(!reset)begin
+count1=count1+1;
+if(count1<=ram2[i])
+begin
+note_to_play<=ram1[i];
+octave_out=ram3[i];
+end
+else  i<=i+1;
+end
+else
+begin
+ count1<=0;
+ i<=0;
+ end
+  end  
 endmodule
+    

@@ -26,8 +26,9 @@ module MiniPiano(
     input wire [6:0] keys,// 7 keys for piano
     input wire reset,
     output wire speaker,
-      output wire test,
-    input wire [1:0] song_select, //select song, next or previous
+    input wire start,
+    input wire write_on,
+    input wire [2:0] song_select, //select song, next or previous
     input wire [2:0] mode,    //  mode 100 free ; 010 auto; 001 learn
     input wire [1:0]octave, //choose the proper octave
     output wire [6:0] led, //control the led
@@ -35,8 +36,10 @@ module MiniPiano(
     output wire [7:0] light_seg_left, //control the left 4 seg
     output wire seg_out,  //control the right seg
     output wire [3:0] an //control the left seg
+
+
     );
-    assign test=1'b0;
+
     wire [3:0] note;
     wire[1:0] octave_auto;
     wire [3:0] num;
@@ -45,6 +48,7 @@ module MiniPiano(
     Controller controller_inst(
         .clk(clk),
         .keys(keys),
+        .write_on(write_on),
         .note_out(note),
         .reset(reset),
         .mode(mode),
@@ -74,12 +78,13 @@ module MiniPiano(
         .num(num),
         .seg1(light_seg),
         .seg(light_seg_left),
-        .an(seg_out),
+        .an(an),
         .clk(clk),
-        .reset(reset)
+        .reset(reset),
+        .mode(mode),
+        .seg_out(seg_out)
     );
 
     // Other modules can be instantiated and connected similarly
 
 endmodule
-
