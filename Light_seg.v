@@ -92,6 +92,7 @@ always @(posedge clk )
         case(mode)
             3'b010: begin
                 seg1 <= seg2;
+                seg_out=1'b1;
                 // Only update outputs when mode is 3'b010
                 case(display_select)
                     2'b00: begin
@@ -117,6 +118,7 @@ always @(posedge clk )
                 seg1 <= 8'b00000000;
                 seg <= 8'b00000000;
                 an <= 4'b0000;
+                seg_out=1'b0;
             end
         endcase
 
