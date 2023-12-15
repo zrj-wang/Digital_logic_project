@@ -5,12 +5,14 @@ module Light_seg (
     input wire reset,           // Reset signal
     output reg [6:0] seg1,   // show number
     output reg [6:0] seg,   //show name   
-    output reg [3:0] an
+    output reg [3:0] an,
+    output wire test
 );
 parameter s=8'b01001001,t=8'b00001111,a=8'b01110111,r=8'b01000110;
 parameter b=8'b00011111,d=8'b00111101,y=8'b00111011;
 parameter e=8'b01001111;
 
+assign test=1'b0;
 
 reg [7:0] char1, char2, char3, char4;
 reg [1:0] display_select;// 2-bit output for the digit select
@@ -74,20 +76,20 @@ end
 always @(*) begin
     case(display_select)
         2'b00: begin
-            seg <= char1;  // 显示第一个字母
-            an <= 4'b0001; // 激活第一个数码管
+            seg <= char1;  
+            an <= 4'b0001; 
         end
         2'b01: begin
-            seg <= char2;  // 显示第二个字母
-            an <= 4'b0010; // 激活第二个数码管
+            seg <= char2;  
+            an <= 4'b0010; 
         end
         2'b10: begin
-            seg <= char3;  // 显示第三个字母
-            an <= 4'b0100; // 激活第三个数码管
+            seg <= char3;  
+            an <= 4'b0100; 
         end
         2'b11: begin
-            seg <= char4;  // 显示第四个字母
-            an <= 4'b1000; // 激活第四个数码管
+            seg <= char4;  
+            an <= 4'b1000; 
         end
     endcase
 end
