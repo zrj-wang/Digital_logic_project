@@ -16,14 +16,14 @@ module Controller(
 
     mode_auto auto_inst(
         .clk(clk),
-        .reset(reset),
+.reset(reset),
         .note_to_play(note_auto),
-        .song_select(song_select),
+.song_select(song_select),
         .led_out(led_auto),
         .octave_auto(octave_auto),
         .num(num)
     );
-    // Learn mode wires
+// Learn mode wires
     wire [3:0] note_learn;
     wire [6:0] led_learn;
     

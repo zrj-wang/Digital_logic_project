@@ -98,15 +98,15 @@ Lib lib_inst(
     .ocative_packed(octave_packed),
     .num(num)
 
-);
+//);
 
-//unpack song
-genvar i;
-generate
-    for (i = 0; i < song_time; i = i + 1) begin : unpack_loop
-        assign song[i] = song_packed[(4*i)+3 : 4*i];
-    end
-endgenerate
+////unpack song
+//genvar i;
+//generate
+//    for (i = 0; i < song_time; i = i + 1) begin : unpack_loop
+//        assign song[i] = song_packed[(4*i)+3 : 4*i];
+//    end
+//endgenerate
 
 
 //unpack time
