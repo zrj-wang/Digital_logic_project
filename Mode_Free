@@ -23,6 +23,7 @@
 module Mode_Free(
  input wire clk,
    input wire write_on,
+    input wire [2:0]select_song,
     input wire [6:0] keys,
    input wire [1:0] octave,
    output pwm
