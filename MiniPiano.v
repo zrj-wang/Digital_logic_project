@@ -1,9 +1,32 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 2023/12/07 00:50:13
+// Design Name: 
+// Module Name: MiniPiano
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
 
 module MiniPiano(
     input wire clk,
     input wire [6:0] keys,// 7 keys for piano
     input wire reset,
     output wire speaker,
+      output wire test,
     input wire [1:0] song_select, //select song, next or previous
     input wire [2:0] mode,    //  mode 100 free ; 010 auto; 001 learn
     input wire [1:0]octave, //choose the proper octave
@@ -13,7 +36,7 @@ module MiniPiano(
     output wire seg_out,  //control the right seg
     output wire [3:0] an //control the left seg
     );
-
+    assign test=1'b0;
     wire [3:0] note;
     wire[1:0] octave_auto;
     wire [3:0] num;
@@ -59,3 +82,4 @@ module MiniPiano(
     // Other modules can be instantiated and connected similarly
 
 endmodule
+

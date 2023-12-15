@@ -59,8 +59,6 @@ always @(posedge clk) begin
     if (!reset) begin
         // reset to the first song
         prev_song_select <= 2'b00; // 
-        play_position <= 0;
-        note_counter <= 0;
         song_num <= begin_song;
     end else begin
         // check for song_select[0] and song_select[1] rising edges
@@ -70,8 +68,7 @@ always @(posedge clk) begin
             end else begin
                 song_num <= song_num + 1;
             end
-            play_position <= 0;
-            note_counter <= 0;
+
         end
         
         else if (song_select[1] == 1'b1 && prev_song_select[1] == 1'b0) begin
@@ -80,8 +77,7 @@ always @(posedge clk) begin
             end else begin
                 song_num <= song_num - 1;
             end
-            play_position <= 0;
-            note_counter <= 0;
+
         end
         prev_song_select <= song_select; 
     end

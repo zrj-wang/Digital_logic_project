@@ -28,9 +28,6 @@ set_property PACKAGE_PIN B4 [get_ports light_seg_left[6]]
 set_property PACKAGE_PIN D5 [get_ports light_seg_left[7]]
 
 
-
-
-
 set_property PACKAGE_PIN D4 [get_ports light_seg[6]]
 set_property PACKAGE_PIN E3 [get_ports light_seg[5]]
 set_property PACKAGE_PIN D3 [get_ports light_seg[4]]
@@ -75,5 +72,5 @@ set_property PACKAGE_PIN J2 [get_ports led[6]]
 set_property PACKAGE_PIN H17 [get_ports speaker]
 set_property PACKAGE_PIN T1 [get_ports test]
 
-set_property PACKAGE_PIN U3 [get_ports octave[0]]
-set_property PACKAGE_PIN U2 [get_ports octave[1]]
+set_property PACKAGE_PIN U3 [get_ports {octave[0]}]
+set_property PACKAGE_PIN U2 [get_ports {octave[1]}]
