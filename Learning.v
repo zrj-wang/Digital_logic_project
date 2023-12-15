@@ -111,32 +111,58 @@ endgenerate
 
 
 // Play song
-
 always @(posedge clk) begin
-        if (reset) begin
-            // Reset to the beginning of the song
-            play_position <= 0;
+    if (reset) begin
+        // 复位时将播放位置重置为0
+        play_position <= 0;
+        // 将当前音符设置为 music0
+        note_to_play <= music0;
+        // 将LED输出重置为0
+        led_out <= led8;
+        // 将音符的高低八度设置为默认值 00
+        octave_out <= 2'b00; // 默认高低八度
+    end else begin
+        // 在正常时钟上升沿处理以下逻辑
+        // 加载当前音符和高低八度
+        note_to_play <= song[play_position];
+        current_octave <= octave[play_position];
+        octave_out <= current_octave;
+
+        // 为当前音符点亮相应的LED灯
+        case (song[play_position])
+                music1: led_out <= led1;
+                music2: led_out <= led2;
+                music3: led_out <= led3;
+                music4: led_out <= led4;
+                music5: led_out <= led5;
+                music6: led_out <= led6;
+                music7: led_out <= led7;
+                music9:
+                begin
+                  play_position <= 0;
+                end // begin from the start
+                default: led_out <= led8; // 
+            endcase
+
+        // 检查是否按下了正确的开关以播放音符
+        if (switches[note_to_play - 1] && (octave_learn == current_octave) && (note_to_play != music0)) begin
+            // 如果正确的开关被按下且音符不是 music0，移动到下一个音符
+            play_position <= (play_position < song_time - 1) ? play_position + 1 : 0;
+            // 可选择性地重置音符和LED输出以在音符之间关闭它们
             note_to_play <= music0;
             led_out <= 0;
-            octave_out <= 2'b00; // Default octave
-        end else begin
-            // Load the current note and octave
-            note_to_play <= song[play_position];
-            current_octave <= octave_packed[play_position*2 +: 2];
-            octave_out <= current_octave;
-
-            // Light up the corresponding LED for the current note
-            led_out <= (note_to_play != music0) ? (1 << (note_to_play - 1)) : 0;
-
-            // Check if the correct switch is pressed for the note
-            if (switches[note_to_play - 1] && (octave_learn == current_octave)) begin
-                // Move to the next note if the correct switch is pressed
-                play_position <= (play_position < song_time - 1) ? play_position + 1 : 0;
-                // Optionally reset note_to_play and led_out if you want them to turn off between notes
-                note_to_play <= music0;
-                led_out <= 0;
-            end
+        end else if ((note_to_play == music0) && (!switches[0]&&!switches[1]&&!switches[2]&&!switches[3]&&!switches[4]&&!switches[5]&&!switches[6])) begin
+            // 对于 music0，检查是否所有开关都关闭以移动到下一个音符
+            // 如果音符是 music0 且所有开关都关闭，移动到下一个音符
+            play_position <= (play_position < song_time - 1) ? play_position + 1 : 0;
+            // 为 music0 重置音符和LED输出
+            note_to_play <= music0;
+            led_out <= 0;
         end
     end
+end
+
+
+
 
 endmodule
