@@ -56,7 +56,7 @@ integer time_mul = 0;
 
 //choose song logic
 always @(posedge clk) begin
-    if (!reset) begin
+    if (reset) begin
         // reset to the first song
         prev_song_select <= 2'b00; // 
         song_num <= begin_song;
@@ -127,7 +127,7 @@ endgenerate
 //play song logic
 always @(posedge clk, negedge reset) 
 begin
-    if (!reset) begin
+    if (reset) begin
         play_position <= 0;
         note_counter <= 0;
         time_mul <= time_continue[play_position];
