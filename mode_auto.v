@@ -4,7 +4,8 @@ module mode_auto(
     input wire reset,
     output reg [3:0] note_to_play, // out_put to buzzer
     output reg [6:0] led_out,
-    output reg [1:0] octave_auto 
+    output reg [1:0] octave_auto ,
+    output reg[3:0] num
 
 );
  parameter second = 10000000, song_time=56,music0=4'b0000,
@@ -68,7 +69,8 @@ Lib lib_inst(
     .song_packed(song_packed),
     .song_num(song_num),
     .time_continue(time_continue),
-    .ocative_packed(octave_packed)
+    .ocative_packed(octave_packed),
+    .num(num)
 
 );
 

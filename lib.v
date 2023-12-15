@@ -5,7 +5,8 @@ module Lib(
     input wire [1:0] song_num, // on behalf of song
     output reg [223:0] song_packed, // out_put song
     output reg [223:0] time_continue, // each note time
-    output reg [111:0] octave_packed // out_put ocative
+    output reg [111:0] octave_packed, // out_put ocative
+    output reg [3:0]num
 );
 
 
@@ -46,6 +47,8 @@ module Lib(
                 ma, ma, ma, ma, ma, ma, ma, ma
         };
 
+        num=4'd1;
+
               end
 
 
@@ -74,6 +77,8 @@ ma, ma, ma, ma, ma, ma,ma, ma, ma, ma, ma, ma,
    ma, lo, ma, ma, ma, lo, ma, lo, ma, lo, ma, lo
 
         };
+
+        num=4'd2;
 
       end
 
@@ -115,6 +120,7 @@ ma, ma, ma, ma, ma, ma, ma, ma,
  ma, lo, ma, ma, ma, ma
 
         };
+        num=4'd3;
 
       end
   endcase
