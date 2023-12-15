@@ -1,3 +1,26 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 2023/12/07 00:52:49
+// Design Name: 
+// Module Name: mode_auto
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+ 
 module mode_auto(
     input wire clk, // Clock signal
     input wire [1:0] song_select, // choose song
@@ -21,12 +44,15 @@ wire [song_time*4-1:0] song_packed;
 
 reg [1:0] song_num=2'b00; // on behalf of song
 
+wire [song_time*4-1:0] continue;
 wire [3:0] time_continue[song_time-1:0];
 
 wire [1:0] octave[song_time-1:0];
 wire[song_time*2-1:0] octave_packed;
-
-
+reg [1:0] prev_song_select;
+integer play_position = 0;
+integer note_counter = 0;
+integer time_mul = 0;
 
 //choose song logic
 always @(posedge clk) begin
@@ -68,7 +94,7 @@ Lib lib_inst(
     .clk(clk),
     .song_packed(song_packed),
     .song_num(song_num),
-    .time_continue(time_continue),
+    .time_continue(continue),
     .ocative_packed(octave_packed),
     .num(num)
 
@@ -86,7 +112,7 @@ endgenerate
 //unpack time
 generate
     for (i = 0; i < song_time; i = i + 1) begin : unpack
-        assign time_continue[i] = time_continue[(4*i)+3 : 4*i];
+        assign time_continue[i] = continue[(4*i)+3 : 4*i];
     end
 endgenerate
 
@@ -100,9 +126,7 @@ endgenerate
 
 
 //play song
-integer play_position = 0;
-integer note_counter = 0;
-integer time_mul = 0;
+
 
 //play song logic
 always @(posedge clk, negedge reset) 
