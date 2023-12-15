@@ -33,10 +33,11 @@ module MiniPiano(
     output wire [6:0] led, //control the led
     output wire [7:0] light_seg, //control one of the right 4 seg
     output wire [7:0] light_seg_left, //control the left 4 seg
-    output wire seg_out,  //control the right seg
+    output wire seg_control,  //control the right seg
     output wire [3:0] an //control the left seg
     );
     assign test=1'b0;
+    assign seg_control=1'b1;
     wire [3:0] note;
     wire[1:0] octave_auto;
     wire [3:0] num;
@@ -74,9 +75,10 @@ module MiniPiano(
         .num(num),
         .seg1(light_seg),
         .seg(light_seg_left),
-        .an(seg_out),
+        .an(an),
         .clk(clk),
-        .reset(reset)
+        .reset(reset),
+        .mode(mode)
     );
 
     // Other modules can be instantiated and connected similarly
