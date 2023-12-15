@@ -21,7 +21,7 @@
 
 
 module mode_learn(
-
+    input wire clk, // Clock signal
     input wire [1:0] song_select, // choose song
     input wire [6:0] switches, // 7个开关输入
     input wire reset, // Reset signal
