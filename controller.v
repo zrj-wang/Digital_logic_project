@@ -54,7 +54,7 @@ module Controller(
     .reset(reset),
     .keys(keys),
     .song_select(song_select),
-    .note_to_play(note_out),
+    .note_to_play(note_auto),
     .octave(octave),
     .octave_out(octave_auto),
     .num(num_auto)
