@@ -51,12 +51,13 @@ module Controller(
 
     mode_auto auto_inst(
         .clk(clk),
-        .reset(reset),
-        .note_to_play(note_auto),
-        .song_select(song_select),
-        .led_out(led_auto),
-        .octave_auto(octave_auto),
-        .num(num_auto)
+    .reset(reset),
+    .write_on(write_on),
+    .keys(keys),
+    .song_select(song_select),
+    .note_to_play(note_out),
+    .octave(octave),
+    .octave_out(octave_auto)
     );
    // Initialize for learn mode
    wire [3:0] num_learn;
