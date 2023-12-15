@@ -6,7 +6,8 @@ module Light_seg (
     input wire [2:0] mode,
    output reg [7:0] seg1,   // show number
     output reg [7:0] seg,   //show name   
-    output reg [3:0] an
+    output reg [3:0] an,
+    output reg  seg_out
 );
 parameter s=8'b01001001,t=8'b00001111,a=8'b01110111,r=8'b01000110;
 parameter b=8'b00011111,d=8'b00111101,y=8'b00111011;
@@ -79,7 +80,7 @@ assign refresh_tick = (refresh_counter == 0); // refresh_tick is high for one cl
 //choose the seg
 always @(posedge clk or posedge reset) begin
     if (reset) begin
-        display_select <= 0;
+        display_select <= 2'b00;
     end else if (refresh_tick) begin
         display_select <= display_select + 1;
     end
