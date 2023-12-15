@@ -3,20 +3,18 @@ module Light_seg (
     input wire [3:0] num,       // 4-bit input representing the song number
     input wire clk,             // Clock signal
     input wire reset,           // Reset signal
-    output reg [6:0] seg1,   // show number
+    input wire [2:0] mode,
+   output reg [6:0] seg1,   // show number
     output reg [6:0] seg,   //show name   
-    output reg [3:0] an,
-    output wire test
+    output reg [3:0] an
 );
 parameter s=8'b01001001,t=8'b00001111,a=8'b01110111,r=8'b01000110;
 parameter b=8'b00011111,d=8'b00111101,y=8'b00111011;
 parameter e=8'b01001111;
 
-assign test=1'b0;
 
 reg [7:0] char1, char2, char3, char4;
 reg [1:0] display_select;// 2-bit output for the digit select
-
 
     // Define the segment patterns for numbers 0-9 for a common cathode seven-segment display
     always @(*) begin
@@ -55,24 +53,38 @@ reg [1:0] display_select;// 2-bit output for the digit select
         endcase
     end
 
-//star 
-// 8'b01001001,8'b00001111,8'b01110111,8'b01000110
 
-//bday
-//8'b00011111,8'b00111101,8'b01110111,8'b00111011
 
-//year
-//8'b00111011,8'b01001111,8'b01110111,8'b01000110
+
+
+reg [19:0] refresh_counter = 0; // counter for refreshing the display
+wire refresh_tick;
+
 
 always @(posedge clk or posedge reset) begin
     if (reset) begin
-        display_select <= 0;
+        refresh_counter <= 0;
     end else begin
+        if (refresh_counter >= 499999) begin
+            refresh_counter <= 0;
+        end else begin
+            refresh_counter <= refresh_counter + 1;
+        end
+    end
+end
+
+assign refresh_tick = (refresh_counter == 0); // refresh_tick is high for one clock cycle every 1000000 clock cycles
+
+//choose the seg
+always @(posedge clk or posedge reset) begin
+    if (reset) begin
+        display_select <= 0;
+    end else if (refresh_tick) begin
         display_select <= display_select + 1;
     end
 end
 
-// 控制数码管显示
+// control the seg
 always @(*) begin
     case(display_select)
         2'b00: begin
@@ -96,5 +108,15 @@ end
 
 
 
-
 endmodule
+
+
+
+//star 
+// 8'b01001001,8'b00001111,8'b01110111,8'b01000110
+
+//bday
+//8'b00011111,8'b00111101,8'b01110111,8'b00111011
+
+//year
+//8'b00111011,8'b01001111,8'b01110111,8'b01000110
