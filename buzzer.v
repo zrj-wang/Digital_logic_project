@@ -9,31 +9,28 @@ module Buzzer (
  ) ;
 
  
- real muti;
-
+integer muti;
 
 always @(*) begin
-case (mode)
-3'b010:begin
-case (octave_auto)
-2'b01:muti=2;
-2'b10:muti=0.5;
-default:muti=1;
-endcase
-end
+    case (mode)
+        3'b010: begin
+            case (octave_auto)
+                2'b01: muti = 2;   // 增加一倍频率
+                2'b10: muti = 1;   // 减半频率（通过跳过一半的计数来实现）
+                default: muti = 2; // 默认值
+            endcase
+        end
 
-3'b100:begin
-case (octave)
-2'b01:muti=2;
-2'b10:muti=0.5;
-default:muti=1;
-endcase
-end
+        3'b100: begin
+            case (octave)
+                2'b01: muti = 2;   // 增加一倍频率
+                2'b10: muti = 1;   // 减半频率
+                default: muti = 2; // 默认值
+            endcase
+        end
 
-default:muti=1;
-
-endcase
-    
+        default: muti = 2;
+    endcase
 end
 
 
@@ -50,19 +47,24 @@ end
  assign notes [5]=255102;
  assign notes [6]=227273;
  assign notes [7]=202429;
+
+
  initial
  begin
  pwm =0;
  end
- always @ (posedge clk) begin
- //add muti to control the frequency of buzzing so that the octave is changed
- if ( counter < notes [ note ]*muti|| note ==1'b0 ) begin
- counter <= counter + 1'b1 ;
- end 
- else begin
- pwm =~ pwm ;
- counter <= 0;
- end
- end
+
+
+ always @(posedge clk) begin
+    if (counter < notes[note] || note == 1'b0) begin
+        if (muti == 1 || (muti == 2 && counter[0] == 1'b0)) begin
+            // 只在 muti 为 1 或 muti 为 2 且计数器为偶数时递增计数器
+            counter <= counter + 1;
+        end
+    end else begin
+        pwm <= ~pwm;
+        counter <= 0;
+    end
+end
  assign speaker = pwm ; // Output a PWM signal to the buzzer
  endmodule

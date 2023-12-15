@@ -14,15 +14,15 @@ module Controller(
     wire [3:0] note_auto;
     wire [6:0] led_auto;
 
-//    mode_auto auto_inst(
-//        .clk(clk),
-//.reset(reset),
-//        .note_to_play(note_auto),
-//.song_select(song_select),
-//        .led_out(led_auto),
-//        .octave_auto(octave_auto),
-//        .num(num)
-//    );
+   mode_auto auto_inst(
+       .clk(clk),
+.reset(reset),
+       .note_to_play(note_auto),
+.song_select(song_select),
+       .led_out(led_auto),
+       .octave_auto(octave_auto),
+       .num(num)
+   );
 // Learn mode wires
     wire [3:0] note_learn;
     wire [6:0] led_learn;
@@ -41,8 +41,8 @@ module Controller(
                 
             end
             mode_auto: begin
-//                note_out <= note_auto;
-//                led_out <= led_auto;
+               note_out <= note_auto;
+               led_out <= led_auto;
             end
             mode_learn: begin
                 note_out <= note_learn;

@@ -7,18 +7,38 @@ set_property IOSTANDARD LVCMOS33 [get_ports mode]
 set_property IOSTANDARD LVCMOS33 [get_ports reset]
 set_property IOSTANDARD LVCMOS33 [get_ports light_seg]
 set_property IOSTANDARD LVCMOS33 [get_ports seg_out]
-set_property IOSTANDARD LVCMOS33 [get_ports octave]//need to check
+set_property IOSTANDARD LVCMOS33 [get_ports octave]
 set_property IOSTANDARD LVCMOS33 [get_ports test]
+set_property IOSTANDARD LVCMOS33 [get_ports light_seg_left]
+set_property IOSTANDARD LVCMOS33 [get_ports an]
 
 
-set_property PACKAGE_PIN D4 [get_ports {seg_ctrl[6]}]
-set_property PACKAGE_PIN E3 [get_ports {seg_ctrl[5]}]
-set_property PACKAGE_PIN D3 [get_ports {seg_ctrl[4]}]
-set_property PACKAGE_PIN F4 [get_ports {seg_ctrl[3]}]
-set_property PACKAGE_PIN F3 [get_ports {seg_ctrl[2]}]
-set_property PACKAGE_PIN E2 [get_ports {seg_ctrl[1]}]
-set_property PACKAGE_PIN D2 [get_ports {seg_ctrl[0]}]
-set_property PACKAGE_PIN H2 [get_ports {seg_ctrl[7]}]
+set_property PACKAGE_PIN G2 [get_ports an[0]]
+set_property PACKAGE_PIN C2 [get_ports an[1]]
+set_property PACKAGE_PIN C1 [get_ports an[2]]
+set_property PACKAGE_PIN H1 [get_ports an[3]]
+
+set_property PACKAGE_PIN B2 [get_ports light_seg_left[0]]
+set_property PACKAGE_PIN B3 [get_ports light_seg_left[1]]
+set_property PACKAGE_PIN A1 [get_ports light_seg_left[2]]
+set_property PACKAGE_PIN B1 [get_ports light_seg_left[3]]
+set_property PACKAGE_PIN A3 [get_ports light_seg_left[4]]
+set_property PACKAGE_PIN A4 [get_ports light_seg_left[5]]
+set_property PACKAGE_PIN B4 [get_ports light_seg_left[6]]
+set_property PACKAGE_PIN D5 [get_ports light_seg_left[7]]
+
+
+
+
+
+set_property PACKAGE_PIN D4 [get_ports light_seg[6]]
+set_property PACKAGE_PIN E3 [get_ports light_seg[5]]
+set_property PACKAGE_PIN D3 [get_ports light_seg[4]]
+set_property PACKAGE_PIN F4 [get_ports light_seg[3]]
+set_property PACKAGE_PIN F3 [get_ports light_seg[2]]
+set_property PACKAGE_PIN E2 [get_ports light_seg[1]]
+set_property PACKAGE_PIN D2 [get_ports light_seg[0]]
+set_property PACKAGE_PIN H2 [get_ports light_seg[7]]
 
 set_property PACKAGE_PIN G6 [get_ports seg_out]
 
