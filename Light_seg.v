@@ -64,7 +64,7 @@ wire refresh_tick;
 
 
 always @(posedge clk or posedge reset) begin
-    if (reset) begin
+    if (!reset) begin
         refresh_counter <= 0;
     end else begin
         if (refresh_counter >= 199999) begin
@@ -79,7 +79,7 @@ assign refresh_tick = (refresh_counter == 0); // refresh_tick is high for one cl
 
 //choose the seg
 always @(posedge clk or posedge reset) begin
-    if (reset) begin
+    if (!reset) begin
         display_select <= 2'b00;
     end else if (refresh_tick) begin
         display_select <= display_select + 1;

@@ -54,7 +54,10 @@ module MiniPiano(
         .mode(mode),
         .song_select(song_select),
         .led_out(led),
-        .num(num)
+        .num(num),
+        .octave(octave),
+        .octave_out(octave_auto)
+
     );
     
 
