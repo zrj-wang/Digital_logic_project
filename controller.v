@@ -24,6 +24,7 @@
 
 module Controller(
     input wire clk,
+    input wire write_on,
     input wire [6:0] keys,
     input wire [1:0]octave, //choose the proper octave
     input wire [2:0] mode,//  mode 100 free ; 010 auto; 001 learn //check constrain
@@ -35,13 +36,12 @@ module Controller(
     output reg [1:0] octave_out
 );
  parameter mode_free=3'b100, mode_auto=3'b010, mode_learn=3'b001;
-wire [3:0] num_auto;
+    wire [3:0] num_auto;
     wire [3:0] note_auto;
     wire [6:0] led_auto;
     wire [1:0]octave_auto;
 
     mode_auto auto_inst(
-<<<<<<< HEAD
     .clk(clk),
     .reset(reset),
     .song_select(song_select),
@@ -49,29 +49,23 @@ wire [3:0] num_auto;
     .led_out(led_auto),
     .octave_out(octave_auto),
     .num(num_auto)
-=======
-        .clk(clk),
-        .reset(reset),
-        .note_to_play(note_auto),
-        .song_select(song_select),
-        .led_out(led_auto),
-        .octave_auto(octave_auto),
-        .num(num_auto)
->>>>>>> 8dc0ee1ab4e48053fd5e3b1c962eb62969fa06a7
     );
+
+
+
    // Initialize for learn mode
-   wire [3:0] num_learn;
+            wire [3:0] num_learn;
            wire [3:0] note_learn;
            wire [6:0] led_learn;
-           wire [1:0]octave_learn;
+wire [1:0]octave_learn;
            
            mode_learn learn_inst(
                .clk(clk),
                .switches(keys),
                .note_to_play(note_learn),
-               .song_select(song_select),
+.song_select(song_select),
                .led_out(led_learn),
-               .octave_out(octave_learn),
+.octave_out(octave_learn),
                .octave_learn(octave), // Assuming octave_learn is the same as octave
                .num(num_learn), // Assuming mode_learn module provides num output
                .reset(reset) // Assuming mode_learn module has reset input
@@ -89,13 +83,13 @@ wire [3:0] num_auto;
                 note_out <= note_auto;
                 led_out <= led_auto;
                 num <=num_auto;
-                octave_out <= octave_auto;
+octave_out <= octave_auto;
             end
             mode_learn: begin
                 note_out <= note_learn;
                 led_out <= led_learn;
                 num <= num_learn;
-                octave_out <= octave_learn;
+octave_out <= octave_learn;
                         end
 
             default: begin
@@ -104,3 +98,5 @@ wire [3:0] num_auto;
         endcase
     end
 endmodule
+
+
