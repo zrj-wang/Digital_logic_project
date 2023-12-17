@@ -35,10 +35,13 @@ module MiniPiano(
     output wire [7:0] light_seg, //control one of the right 4 seg
     output wire [7:0] light_seg_left, //control the left 4 seg
     output wire seg_out,  //control the right seg
-    output wire [3:0] an //control the left seg
+    output wire [3:0] an, //control the left seg
 
+    output wire test 
 
     );
+    assign test = 1'b0;
+
 
     wire [3:0] note;
     wire[1:0] octave_auto;

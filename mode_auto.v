@@ -30,19 +30,22 @@ module mode_auto(
     output reg [1:0] octave_auto ,
     output wire[3:0] num
 
+
+
 );
  parameter second = 10000000, song_time=56,music0=4'b0000,
  music1=4'b0001, music2=4'b0010,music3=4'b0011,music4=4'b0100,music5=4'b0101,
  music6=4'b0110,music7=4'b0111,music9=4'b1111,
  led1=7'b0000001,led2=7'b0000010,led3=7'b0000100,led4=7'b0001000,led5=7'b0010000,
  led6=7'b0100000,led7=7'b1000000,led8=7'b0000000;
-parameter begin_song=2'b00, mid_song=2'b01,final_song=2'b10; 
 
+parameter song_1=4'd1, song_2=4'd2,song_3=4'd3,song_4=4'd4,song_5=4'd5,song_6=4'd6; 
+reg [3:0] song_num=song_1; // on behalf of song
 
 wire [3:0] song[song_time-1:0];
 wire [song_time*4-1:0] song_packed;
 
-reg [1:0] song_num=2'b00; // on behalf of song
+
 
 wire [song_time*4-1:0] continue;
 wire [3:0] time_continue[song_time-1:0];
@@ -59,8 +62,8 @@ always @(posedge clk) begin
   begin
         // check for song_select[0] and song_select[1] rising edges
         if (song_select[0] == 1'b1 && prev_song_select[0] == 1'b0) begin
-            if (song_num == final_song) begin
-                song_num <= begin_song;
+            if (song_num == song_6) begin
+                song_num <= song_1;
             end else begin
                 song_num <= song_num + 1;
             end
@@ -68,8 +71,8 @@ always @(posedge clk) begin
         end
         
         else if (song_select[1] == 1'b1 && prev_song_select[1] == 1'b0) begin
-            if (song_num == begin_song) begin
-                song_num <= final_song;
+            if (song_num == song_1) begin
+                song_num <= song_6;
             end else begin
                 song_num <= song_num - 1;
             end
@@ -81,7 +84,9 @@ end
 
 
 
+// if song_num =(1,3) ,use song from lib, else from mode_free
 // Instantiate the Lib, find the song
+
 Lib lib_inst(
     .clk(clk),
     .song_packed(song_packed),
@@ -91,6 +96,8 @@ Lib lib_inst(
     .num(num)
 
 );
+
+
 
 //unpack song
 genvar i;

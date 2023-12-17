@@ -12,9 +12,6 @@ module Buzzer (
 integer muti;
 
 
-
-
-
  wire [31:0] notes [7:0];
  reg [31:0] counter ;
  reg pwm ;

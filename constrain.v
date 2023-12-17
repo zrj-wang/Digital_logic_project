@@ -1,17 +1,19 @@
 set_property IOSTANDARD LVCMOS33 [get_ports clk]
 set_property IOSTANDARD LVCMOS33 [get_ports keys]
+set_property IOSTANDARD LVCMOS33 [get_ports reset]
 set_property IOSTANDARD LVCMOS33 [get_ports speaker]
-set_property IOSTANDARD LVCMOS33 [get_ports led]
+set_property IOSTANDARD LVCMOS33 [get_ports start]
+
 set_property IOSTANDARD LVCMOS33 [get_ports song_select]
 set_property IOSTANDARD LVCMOS33 [get_ports mode]
-set_property IOSTANDARD LVCMOS33 [get_ports reset]
+set_property IOSTANDARD LVCMOS33 [get_ports octave]
+set_property IOSTANDARD LVCMOS33 [get_ports led]
+set_property IOSTANDARD LVCMOS33 [get_ports light_seg_left]
 set_property IOSTANDARD LVCMOS33 [get_ports light_seg]
 set_property IOSTANDARD LVCMOS33 [get_ports seg_out]
-set_property IOSTANDARD LVCMOS33 [get_ports octave]
-set_property IOSTANDARD LVCMOS33 [get_ports test]
-set_property IOSTANDARD LVCMOS33 [get_ports light_seg_left]
 set_property IOSTANDARD LVCMOS33 [get_ports an]
-set_property IOSTANDARD LVCMOS33 [get_ports start]
+set_property IOSTANDARD LVCMOS33 [get_ports test]
+
 
 
 
