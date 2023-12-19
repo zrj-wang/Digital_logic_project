@@ -37,12 +37,15 @@ parameter second = 10000000, song_time=56,music0=4'b0000,
  music6=4'b0110,music7=4'b0111,music9=4'b1111,
  led1=7'b0000001,led2=7'b0000010,led3=7'b0000100,led4=7'b0001000,led5=7'b0010000,
  led6=7'b0100000,led7=7'b1000000,led8=7'b0000000;
-parameter begin_song=2'b00, mid_song=2'b01,final_song=2'b10;
+
+parameter song_1=4'd1, song_2=4'd2,song_3=4'd3,song_4=4'd4,song_5=4'd5,song_6=4'd6; 
 // only seven now, but not enough
 
 wire [3:0] song[song_time-1:0];
 wire [song_time*4-1:0] song_packed;
-reg [1:0] song_num=2'b00; // on behalf of song
+reg [3:0] song_num=song_1; // on behalf of song
+wire [song_time*4-1:0] continue;
+wire [3:0] time_continue[song_time-1:0];
 wire [1:0] octave[song_time-1:0];
 wire[song_time*2-1:0] octave_packed;
 reg [1:0] prev_song_select;
@@ -53,32 +56,24 @@ reg [1:0] current_octave; // Current note's octave
 
 //choose song logic
 always @(posedge clk) begin
-    if (!reset) begin
-        // reset to the first song
-        prev_song_select <= 2'b00; // 
-        play_position <= 0;
-        note_counter <= 0;
-        song_num <= begin_song;
-    end else begin
+  begin
         // check for song_select[0] and song_select[1] rising edges
         if (song_select[0] == 1'b1 && prev_song_select[0] == 1'b0) begin
-            if (song_num == final_song) begin
-                song_num <= begin_song;
+            if (song_num == song_6) begin
+                song_num <= song_1;
             end else begin
                 song_num <= song_num + 1;
             end
-            play_position <= 0;
-            note_counter <= 0;
+
         end
         
         else if (song_select[1] == 1'b1 && prev_song_select[1] == 1'b0) begin
-            if (song_num == begin_song) begin
-                song_num <= final_song;
+            if (song_num == song_1) begin
+                song_num <= song_6;
             end else begin
                 song_num <= song_num - 1;
             end
-            play_position <= 0;
-            note_counter <= 0;
+
         end
         prev_song_select <= song_select; 
     end
@@ -101,6 +96,12 @@ generate
         assign song[i] = song_packed[(4*i)+3 : 4*i];
     end
 endgenerate
+//unpack time
+generate
+    for (i = 0; i < song_time; i = i + 1) begin : unpack
+        assign time_continue[i] = continue[(4*i)+3 : 4*i];
+    end
+endgenerate
 
 //unpack octave
 generate
@@ -111,55 +112,99 @@ endgenerate
 
 
 // Play song
-always @(posedge clk) begin
-    if (reset) begin
+always @(posedge clk, negedge reset) begin
+    if (!reset) begin
         // 复位时将播放位置重置为0
         play_position <= 0;
-        // 将当前音符设置为 music0
-        note_to_play <= music0;
-        // 将LED输出重置为0
-        led_out <= led8;
-        // 将音符的高低八度设置为默认值 00
-        octave_out <= 2'b00; // 默认高低八度
+        note_counter <= 0;
+        time_mul <= time_continue[play_position];
     end else begin
-        // 在正常时钟上升沿处理以下逻辑
-        // 加载当前音符和高低八度
-        note_to_play <= song[play_position];
-        current_octave <= octave[play_position];
-        octave_out <= current_octave;
-
-        // 为当前音符点亮相应的LED灯
         case (song[play_position])
-                music1: led_out <= led1;
-                music2: led_out <= led2;
-                music3: led_out <= led3;
-                music4: led_out <= led4;
-                music5: led_out <= led5;
-                music6: led_out <= led6;
-                music7: led_out <= led7;
-                music9:
-                begin
-                  play_position <= 0;
-                end // begin from the start
-                default: led_out <= led8; // 
-            endcase
-
-        // 检查是否按下了正确的开关以播放音符
-        if (switches[note_to_play - 1] && (octave_learn == current_octave) && (note_to_play != music0)) begin
-            // 如果正确的开关被按下且音符不是 music0，移动到下一个音符
-            play_position <= (play_position < song_time - 1) ? play_position + 1 : 0;
-            // 可选择性地重置音符和LED输出以在音符之间关闭它们
-            note_to_play <= music0;
-            led_out <= 0;
-        end else if ((note_to_play == music0) && (!switches[0]&&!switches[1]&&!switches[2]&&!switches[3]&&!switches[4]&&!switches[5]&&!switches[6])) begin
-            // 对于 music0，检查是否所有开关都关闭以移动到下一个音符
-            // 如果音符是 music0 且所有开关都关闭，移动到下一个音符
-            play_position <= (play_position < song_time - 1) ? play_position + 1 : 0;
-            // 为 music0 重置音符和LED输出
-            note_to_play <= music0;
-            led_out <= 0;
+            music1: led_out <= led1;
+            music2: led_out <= led2;
+            music3: led_out <= led3;
+            music4: led_out <= led4;
+            music5: led_out <= led5;
+            music6: led_out <= led6;
+            music7: led_out <= led7;
+            music9:
+            begin
+              play_position <= 0;
+            end // begin from the start
+            default: led_out <= led8; // 
+        endcase
+        time_mul <= time_continue[play_position]; //time_mul is the time of each note
+        if(song[play_position]==0) begin
+        if(!switches[0] && !switches[1] && !switches[2] && !switches[3] && !switches[4] && !switches[5] && !switches[6] )begin
+         if (note_counter < second* time_mul ) begin
+                           // continue playing the current note
+                           note_counter <= note_counter + 1;
+                       end else begin
+                                   // move to the next note
+                                   note_counter <= 0;
+                                   play_position <= play_position + 1;
+                                   if (play_position >= song_time-1) //
+                                       play_position <= 0; // begin from the start
+                               end
         end
-    end
+        end else
+        if(switches[song[play_position]-1] && octave_learn==octave[play_position]) begin
+            if (note_counter < second* time_mul ) begin
+                    // continue playing the current note
+                    note_counter <= note_counter + 1;
+                end else begin
+                            // move to the next note
+                            note_counter <= 0;
+                            play_position <= play_position + 1;
+                            if (play_position >= song_time-1) //
+                                play_position <= 0; // begin from the start
+                        end
+                        note_to_play <= song[play_position];
+                            octave_out <= octave[play_position];
+        end
+        end
+    
+    
+    
+    
+//        // 在正常时钟上升沿处理以下逻辑
+//        // 加载当前音符和高低八度
+//        note_to_play <= song[play_position];
+//        current_octave <= octave[play_position];
+//        octave_out <= current_octave;
+
+//        // 为当前音符点亮相应的LED灯
+//        case (song[play_position])
+//                music1: led_out <= led1;
+//                music2: led_out <= led2;
+//                music3: led_out <= led3;
+//                music4: led_out <= led4;
+//                music5: led_out <= led5;
+//                music6: led_out <= led6;
+//                music7: led_out <= led7;
+//                music9:
+//                begin
+//                  play_position <= 0;
+//                end // begin from the start
+//                default: led_out <= led8; // 
+//            endcase
+
+//        // 检查是否按下了正确的开关以播放音符
+//        if (switches[note_to_play - 1] && (octave_learn == current_octave) && (note_to_play != music0)) begin
+//            // 如果正确的开关被按下且音符不是 music0，移动到下一个音符
+//            play_position <= (play_position < song_time - 1) ? play_position + 1 : 0;
+//            // 可选择性地重置音符和LED输出以在音符之间关闭它们
+//            note_to_play <= music0;
+//            led_out <= 0;
+//        end else if ((note_to_play == music0) && (!switches[0]&&!switches[1]&&!switches[2]&&!switches[3]&&!switches[4]&&!switches[5]&&!switches[6])) begin
+//            // 对于 music0，检查是否所有开关都关闭以移动到下一个音符
+//            // 如果音符是 music0 且所有开关都关闭，移动到下一个音符
+//            play_position <= (play_position < song_time - 1) ? play_position + 1 : 0;
+//            // 为 music0 重置音符和LED输出
+//            note_to_play <= music0;
+//            led_out <= 0;
+//        end
+//    end
 end
 
 
