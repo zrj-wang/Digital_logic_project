@@ -53,6 +53,7 @@ integer play_position = 0;
 integer note_counter = 0;
 integer time_mul = 0;
 reg [1:0] current_octave; // Current note's octave
+parameter lo=2'b01, hi=2'b10, ma=2'b00;
 
 //choose song logic
 always @(posedge clk) begin
@@ -84,6 +85,7 @@ Lib lib_inst(
     .clk(clk),
     .song_packed(song_packed),
     .song_num(song_num),
+    .time_continue(continue),
     .octave_packed(octave_packed),
     .num(num)
 
@@ -133,78 +135,41 @@ always @(posedge clk, negedge reset) begin
             end // begin from the start
             default: led_out <= led8; // 
         endcase
+
         time_mul <= time_continue[play_position]; //time_mul is the time of each note
-        if(song[play_position]==0) begin
-        if(!switches[0] && !switches[1] && !switches[2] && !switches[3] && !switches[4] && !switches[5] && !switches[6] )begin
-         if (note_counter < second* time_mul ) begin
-                           // continue playing the current note
-                           note_counter <= note_counter + 1;
-                       end else begin
-                                   // move to the next note
-                                   note_counter <= 0;
-                                   play_position <= play_position + 1;
-                                   if (play_position >= song_time-1) //
-                                       play_position <= 0; // begin from the start
-                               end
-        end
+        if(song[play_position]==music0) begin
+            if(!switches[0] && !switches[1] && !switches[2] && !switches[3] && !switches[4] && !switches[5] && !switches[6] )begin
+                if (note_counter < second* time_mul ) begin
+                    // continue playing the current note
+                    note_counter <= note_counter + 1;
+                end else begin
+                    // move to the next note
+                     note_counter <= 0;
+                     play_position <= play_position + 1;
+                     if (play_position >= song_time-1) begin//
+                        play_position <= 0; // begin from the start
+                     end
+                     note_to_play <= song[play_position];
+                     octave_out <= octave[play_position];
+                end
+            end
         end else
         if(switches[song[play_position]-1] && octave_learn==octave[play_position]) begin
             if (note_counter < second* time_mul ) begin
                     // continue playing the current note
                     note_counter <= note_counter + 1;
-                end else begin
-                            // move to the next note
-                            note_counter <= 0;
-                            play_position <= play_position + 1;
-                            if (play_position >= song_time-1) //
-                                play_position <= 0; // begin from the start
-                        end
-                        note_to_play <= song[play_position];
-                            octave_out <= octave[play_position];
+            end else begin
+                // move to the next note
+                note_counter <= 0;
+                play_position <= play_position + 1;
+                if (play_position >= song_time-1)begin //
+                    play_position <= 0; // begin from the start
+                end
+                note_to_play <= song[play_position];
+                octave_out <= octave[play_position];
+            end
         end
-        end
-    
-    
-    
-    
-//        // 在正常时钟上升沿处理以下逻辑
-//        // 加载当前音符和高低八度
-//        note_to_play <= song[play_position];
-//        current_octave <= octave[play_position];
-//        octave_out <= current_octave;
-
-//        // 为当前音符点亮相应的LED灯
-//        case (song[play_position])
-//                music1: led_out <= led1;
-//                music2: led_out <= led2;
-//                music3: led_out <= led3;
-//                music4: led_out <= led4;
-//                music5: led_out <= led5;
-//                music6: led_out <= led6;
-//                music7: led_out <= led7;
-//                music9:
-//                begin
-//                  play_position <= 0;
-//                end // begin from the start
-//                default: led_out <= led8; // 
-//            endcase
-
-//        // 检查是否按下了正确的开关以播放音符
-//        if (switches[note_to_play - 1] && (octave_learn == current_octave) && (note_to_play != music0)) begin
-//            // 如果正确的开关被按下且音符不是 music0，移动到下一个音符
-//            play_position <= (play_position < song_time - 1) ? play_position + 1 : 0;
-//            // 可选择性地重置音符和LED输出以在音符之间关闭它们
-//            note_to_play <= music0;
-//            led_out <= 0;
-//        end else if ((note_to_play == music0) && (!switches[0]&&!switches[1]&&!switches[2]&&!switches[3]&&!switches[4]&&!switches[5]&&!switches[6])) begin
-//            // 对于 music0，检查是否所有开关都关闭以移动到下一个音符
-//            // 如果音符是 music0 且所有开关都关闭，移动到下一个音符
-//            play_position <= (play_position < song_time - 1) ? play_position + 1 : 0;
-//            // 为 music0 重置音符和LED输出
-//            note_to_play <= music0;
-//            led_out <= 0;
-//        end
-//    end
+    end
 end
 
 

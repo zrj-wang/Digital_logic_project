@@ -113,6 +113,29 @@ always @(posedge clk )
                     end
                 endcase
             end
+            3'b001: begin
+                            seg1 <= seg2;
+                            seg_out=1'b1;
+                            // Only update outputs when mode is 3'b010
+                            case(display_select)
+                                2'b00: begin
+                                    seg <= char1;  
+                                    an <= 4'b0001; 
+                                end
+                                2'b01: begin
+                                    seg <= char2;  
+                                    an <= 4'b0010; 
+                                end
+                                2'b10: begin
+                                    seg <= char3;  
+                                    an <= 4'b0100; 
+                                end
+                                2'b11: begin
+                                    seg <= char4;  
+                                    an <= 4'b1000; 
+                                end
+                            endcase
+                        end
             default: begin
                 // Mode is not 3'b010, keep outputs low
                 seg1 <= 8'b00000000;

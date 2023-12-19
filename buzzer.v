@@ -36,6 +36,12 @@ always @(*) begin
                     2'b10: frequency = base_frequencies[note] << 1; // Higher octave
                     default: frequency = base_frequencies[note];    // Standard octave
                 endcase
+            3'b001: // Auto mode
+                                case (octave_auto)
+                                    2'b01: frequency = base_frequencies[note] >> 1; // Lower octave
+                                    2'b10: frequency = base_frequencies[note] << 1; // Higher octave
+                                    default: frequency = base_frequencies[note];    // Standard octave
+                                endcase
             3'b100: // Manual mode
                 case (octave)
                     2'b01: frequency = base_frequencies[note] >> 1; // Lower octave
