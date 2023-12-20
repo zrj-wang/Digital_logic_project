@@ -28,9 +28,9 @@ module mode_auto(
     output reg [3:0] note_to_play, // out_put to buzzer
     output reg [6:0] led_out,
     output reg [1:0] octave_auto ,
-    output wire[3:0] num
-
-
+    output wire[3:0] num,
+    input wire [1:0] speed_select,
+    output wire[1:0] num_speed
 
 );
  parameter second = 10000000, song_time=56,music0=4'b0000,
@@ -40,18 +40,22 @@ module mode_auto(
  led6=7'b0100000,led7=7'b1000000,led8=7'b0000000;
 
 parameter song_1=4'd1, song_2=4'd2,song_3=4'd3,song_4=4'd4,song_5=4'd5,song_6=4'd6; 
+parameter speed_mid=2'b01, speed_low=2'b00, speed_high=2'b10;
+
 reg [3:0] song_num=song_1; // on behalf of song
+reg [1:0] speed_num=speed_mid; //on behalf of speed
 
 wire [3:0] song[song_time-1:0];
 wire [song_time*4-1:0] song_packed;
-
-
 
 wire [song_time*4-1:0] continue;
 wire [3:0] time_continue[song_time-1:0];
 wire [1:0] octave[song_time-1:0];
 wire[song_time*2-1:0] octave_packed;
+
 reg [1:0] prev_song_select;
+reg [1:0] prev_speed_select;
+
 
 integer play_position = 0;
 integer note_counter = 0;
@@ -81,6 +85,35 @@ always @(posedge clk) begin
         prev_song_select <= song_select; 
     end
 end
+
+
+//choose speed logic
+always @(posedge clk) begin
+  begin
+        // check for song_select[0] and song_select[1] rising edges
+        if (speed_select[0] == 1'b1 && prev_speed_select[0] == 1'b0) begin
+            if (speed_num == speed_high) begin
+                speed_num <= speed_low;
+            end else begin
+                speed_num <= speed_num + 1;
+            end
+
+        end
+        
+        else if (speed_select[1] == 1'b1 && prev_speed_select[1] == 1'b0) begin
+            if (speed_num == speed_low) begin
+                speed_num <= speed_high;
+            end else begin
+                speed_num <= speed_num - 1;
+            end
+
+        end
+        prev_speed_select <= speed_select; 
+    end
+end
+
+
+
 
 
 
@@ -134,10 +167,16 @@ begin
         play_position <= 0;
         note_counter <= 0;
         time_mul <= time_continue[play_position];
+        speed_num <= speed_mid;
     end 
     else
     begin
       time_mul <= time_continue[play_position]; //time_mul is the time of each note
+        case(speed_num)
+            speed_low: time_mul <= time_mul<<1;
+            speed_high: time_mul <= time_mul>>1;
+            speed_mid: time_mul <= time_mul;
+        endcase
     if (note_counter < second* time_mul ) begin
         // continue playing the current note
         note_counter <= note_counter + 1;
@@ -169,6 +208,8 @@ begin
     octave_auto <= octave[play_position];
     end
 end
+
+assign num_speed = speed_num;
 
 
 endmodule

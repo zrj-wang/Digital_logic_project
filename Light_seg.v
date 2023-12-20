@@ -4,26 +4,33 @@ module Light_seg (
     input wire clk,             // Clock signal
     input wire reset,           // Reset signal
     input wire [2:0] mode,
-   output reg [7:0] seg1,   // show number
+    output reg [7:0] seg1,   // show right score, speed, song
     output reg [7:0] seg,   //show name   
     output reg [3:0] an,
-    output reg  seg_out
+    output reg [3:0] an_right,
+    input wire [1:0] num_speed
 );
 parameter s=8'b01001001,t=8'b00001111,a=8'b01110111,r=8'b01000110;
 parameter b=8'b00011111,d=8'b00111101,y=8'b00111011;
 parameter e=8'b01001111;
-
+parameter num0=8'b01111111,num1=8'b00110000,num2=8'b01101101,num3=8'b01111001;
+parameter num4=8'b00110011,num5=8'b01011011,num6=8'b01011111,num7=8'b01110000;
+parameter num8=8'b01111111,num9=8'b01111011;   //{dot,a,b,c,d,e,f,g}
+parameter speed_mid=2'b01, speed_low=2'b00, speed_high=2'b10;
+parameter empty=8'b00000000;
 
 reg [7:0] char1, char2, char3, char4;
 reg [1:0] display_select;// 2-bit output for the digit select
-reg [7:0] seg2; // 7-bit output for the segment pattern
+
+reg [7:0] seg_num; // 7-bit output for the segment pattern
+reg [7:0] seg_speed;
 
     // Define the segment patterns for numbers 0-9 for a common cathode seven-segment display
     always @(*) begin
         case(num)
-            4'd0: seg2 = 8'b01111111; // 0         {dot,a,b,c,d,e,f,g}
+            4'd0: seg_num = num0; // 0      
             4'd1: begin
-                seg2 = 8'b00110000; // 1
+                seg_num = num1; // 1
                 char1 = s;
                 char2 = t;
                 char3 = a;
@@ -31,7 +38,7 @@ reg [7:0] seg2; // 7-bit output for the segment pattern
             end
             4'd2:
             begin
-                 seg2 = 8'b01101101; // 2
+                 seg_num= num2; // 2
                     char1 = b;
                     char2 = d;
                     char3 = a;
@@ -39,21 +46,39 @@ reg [7:0] seg2; // 7-bit output for the segment pattern
             end
             4'd3: 
             begin
-                seg2 = 8'b01111001; // 3
+                seg_num = num3; // 3
                 char1 = y;
                 char2 = e;
                 char3 = a;
                 char4 = r;
             end
-            4'd4: seg2 = 8'b00110011; // 4
-            4'd5: seg2 = 8'b01011011; // 5
-            4'd6: seg2 = 8'b01011111; // 6
-            4'd7: seg2 = 8'b01110000; // 7
-            4'd8: seg2 = 8'b01111111; // 8
-            4'd9: seg2 = 8'b01111011; // 9
-            default: seg2 = 8'b00000000; // Off or invalid input
+            4'd4: seg_num = num4; // 4
+            4'd5: seg_num = num5; // 5
+            4'd6: seg_num = num6; // 6
+            4'd7: seg_num = num7; // 7
+            4'd8: seg_num = num8; // 8
+            4'd9: seg_num = num9; // 9
+            default: seg_num = 8'b00000000; // Off or invalid input
         endcase
     end
+
+
+        always @(*) begin
+            case(num_speed)
+            speed_mid: begin
+                seg_speed=num4;
+            end
+            speed_high:begin
+                seg_speed=num5;
+            end
+            speed_low:begin
+                seg_speed=num3;
+            end
+            default: seg_speed=empty;
+        endcase
+
+
+        end
 
 
 
@@ -75,7 +100,7 @@ always @(posedge clk or posedge reset) begin
     end
 end
 
-assign refresh_tick = (refresh_counter == 0); // refresh_tick is high for one clock cycle every 1000000 clock cycles
+assign refresh_tick = (refresh_counter == 0); // refresh_tick is high for one clock cycle every 199999 clock cycles
 
 //choose the seg
 always @(posedge clk or posedge reset) begin
@@ -91,31 +116,36 @@ always @(posedge clk )
  begin
         case(mode)
             3'b010: begin
-                seg1 <= seg2;
-                seg_out=1'b1;
                 // Only update outputs when mode is 3'b010
                 case(display_select)
                     2'b00: begin
-                        seg <= char1;  
-                        an <= 4'b0001; 
+                        seg <= char1;
+                        seg1<=empty;  
+                        an <= 4'b0001;
+                        an_right<= 4'b0001; 
                     end
                     2'b01: begin
-                        seg <= char2;  
+                        seg <= char2;
+                        seg1<=empty;  
                         an <= 4'b0010; 
+                        an_right<= 4'b0010;
                     end
                     2'b10: begin
-                        seg <= char3;  
-                        an <= 4'b0100; 
+                        seg <= char3;
+                        seg1<=seg_speed;  
+                        an <= 4'b0100;
+                        an_right<= 4'b0100;
                     end
                     2'b11: begin
-                        seg <= char4;  
+                        seg <= char4;
+                        seg1<=seg_num;  
                         an <= 4'b1000; 
+                        an_right<= 4'b1000;
                     end
                 endcase
             end
             3'b001: begin
-                            seg1 <= seg2;
-                            seg_out=1'b1;
+
                             // Only update outputs when mode is 3'b010
                             case(display_select)
                                 2'b00: begin
@@ -141,7 +171,7 @@ always @(posedge clk )
                 seg1 <= 8'b00000000;
                 seg <= 8'b00000000;
                 an <= 4'b0000;
-                seg_out=1'b0;
+                an_right <= 4'b0000;
             end
         endcase
 

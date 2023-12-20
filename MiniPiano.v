@@ -37,6 +37,9 @@ module MiniPiano(
     output wire seg_out,  //control the right seg
     output wire [3:0] an, //control the left seg
 
+    input wire[1:0] speed_select, //select the speed of the song
+    output wire[1:0] num_speed, //show the speed of the song
+
     output wire test 
 
     );
@@ -59,7 +62,9 @@ module MiniPiano(
         .led_out(led),
         .num(num),
         .octave(octave),
-        .octave_out(octave_auto)
+        .octave_out(octave_auto),
+        .speed_select(speed_select),
+        .num_speed(num_speed)
 
     );
     

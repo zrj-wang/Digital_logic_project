@@ -33,8 +33,10 @@ module Controller(
     output reg[3:0] num,   //show the number of song
     output reg [3:0] note_out, //output the note
     output reg [6:0] led_out , 
-    output reg [1:0] octave_out //octave from auto mode or learn mode
-);
+    output reg [1:0] octave_out, //octave from auto mode or learn mode
+    input wire [1:0] speed_select,
+    output wire [1:0] num_speed
+    );
  parameter mode_free=3'b100, mode_auto=3'b010, mode_learn=3'b001;
     wire [3:0] num_auto;
     wire [3:0] note_auto;
@@ -48,7 +50,8 @@ module Controller(
     .note_to_play(note_auto),
     .led_out(led_auto),
     .octave_auto(octave_auto),
-    .num(num_auto)
+    .num(num_auto),
+    .num_speed(num_speed)
     );
 
 
