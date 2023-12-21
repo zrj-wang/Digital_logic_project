@@ -7,8 +7,7 @@ module Light_seg (
     output reg [7:0] seg1,   // show right score, speed, song
     output reg [7:0] seg,   //show name   
     output reg [3:0] an,
-    output reg [3:0] an_right,
-    input wire [1:0] num_speed
+    output reg [3:0] an_right
 );
 parameter s=8'b01001001,t=8'b00001111,a=8'b01110111,r=8'b01000110;
 parameter b=8'b00011111,d=8'b00111101,y=8'b00111011;
@@ -23,7 +22,6 @@ reg [7:0] char1, char2, char3, char4;
 reg [1:0] display_select;// 2-bit output for the digit select
 
 reg [7:0] seg_num; // 7-bit output for the segment pattern
-reg [7:0] seg_speed;
 
     // Define the segment patterns for numbers 0-9 for a common cathode seven-segment display
     always @(*) begin
@@ -63,22 +61,6 @@ reg [7:0] seg_speed;
     end
 
 
-        always @(*) begin
-            case(num_speed)
-            speed_mid: begin
-                seg_speed=num4;
-            end
-            speed_high:begin
-                seg_speed=num5;
-            end
-            speed_low:begin
-                seg_speed=num3;
-            end
-            default: seg_speed=empty;
-        endcase
-
-
-        end
 
 
 
@@ -132,7 +114,7 @@ always @(posedge clk )
                     end
                     2'b10: begin
                         seg <= char3;
-                        seg1<=seg_speed;  
+                        seg1<=empty;  
                         an <= 4'b0100;
                         an_right<= 4'b0100;
                     end

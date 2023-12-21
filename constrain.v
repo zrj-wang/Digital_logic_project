@@ -10,12 +10,15 @@ set_property IOSTANDARD LVCMOS33 [get_ports octave]
 set_property IOSTANDARD LVCMOS33 [get_ports led]
 set_property IOSTANDARD LVCMOS33 [get_ports light_seg_left]
 set_property IOSTANDARD LVCMOS33 [get_ports light_seg]
-set_property IOSTANDARD LVCMOS33 [get_ports seg_out]
+
 set_property IOSTANDARD LVCMOS33 [get_ports an]
+set_property IOSTANDARD LVCMOS33 [get_ports an_right]
 set_property IOSTANDARD LVCMOS33 [get_ports test]
 
+set_property IOSTANDARD LVCMOS33 [get_ports speed_select]
 
-
+set_property PACKAGE_PIN R11 [get_ports speed_select[0]]
+set_property PACKAGE_PIN V1 [get_ports speed_select[1]]
 
 set_property PACKAGE_PIN P15 [get_ports reset]
 set_property PACKAGE_PIN R15 [get_ports start]
@@ -24,6 +27,12 @@ set_property PACKAGE_PIN G2 [get_ports an[0]]
 set_property PACKAGE_PIN C2 [get_ports an[1]]
 set_property PACKAGE_PIN C1 [get_ports an[2]]
 set_property PACKAGE_PIN H1 [get_ports an[3]]
+
+set_property PACKAGE_PIN G1 [get_ports an_right[0]]
+set_property PACKAGE_PIN F1 [get_ports an_right[1]]
+set_property PACKAGE_PIN E1 [get_ports an_right[2]]
+set_property PACKAGE_PIN G6 [get_ports an_right[3]]
+
 
 set_property PACKAGE_PIN B2 [get_ports light_seg_left[0]]
 set_property PACKAGE_PIN B3 [get_ports light_seg_left[1]]
@@ -44,7 +53,6 @@ set_property PACKAGE_PIN E2 [get_ports light_seg[1]]
 set_property PACKAGE_PIN D2 [get_ports light_seg[0]]
 set_property PACKAGE_PIN H2 [get_ports light_seg[7]]
 
-set_property PACKAGE_PIN G6 [get_ports seg_out]
 
 
 set_property PACKAGE_PIN U4 [get_ports song_select[0]]

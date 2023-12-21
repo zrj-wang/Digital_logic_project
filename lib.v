@@ -23,20 +23,20 @@ parameter song_1=4'd1, song_2=4'd2,song_3=4'd3,song_4=4'd4,song_5=4'd5,song_6=4'
   always @(*) begin
     case(song_num)
       song_1: begin
-        song_packed={t,t2, t,t3,t, t3,t, t4,t, t4,t, t5,t, t5, 
+        song_packed={t2, t,t3,t, t3,t, t4,t, t4,t, t5,t, t5, 
         t,t2,t, t3, t,t3, t,t4, t,t4,t, t5, t,t5, 
         t,t1,t, t2,t, t2,t, t3,t, t3, t,t4,t, t4,
-        t,t5,t, t6,t, t6, t,t5, t,t5,t, t1,t, t1};
+        t,t5,t, t6,t, t6, t,t5, t,t5,t, t1,t, t1,t};
 
         time_continue={
-        ti3,ti5,ti3,ti5,ti3,ti5,ti3,
+        ti5,ti3,ti5,ti3,ti5,ti3,
         ti5,ti3,ti5,ti3,ti5,ti3,ti5,
         ti3,ti5,ti3,ti5,ti3,ti5,ti3,
         ti5,ti3,ti5,ti3,ti5,ti3,ti5,
         ti3,ti5,ti3,ti5,ti3,ti5,ti3,
         ti5,ti3,ti5,ti3,ti5,ti3,ti5,
         ti3,ti5,ti3,ti5,ti3,ti5,ti3,
-        ti5,ti3,ti5,ti3,ti5,ti3,ti5};
+        ti5,ti3,ti5,ti3,ti5,ti3,ti5,ti3};
 
         octave_packed={
           ma, ma, ma, ma, ma, ma, ma, ma,
@@ -56,26 +56,26 @@ parameter song_1=4'd1, song_2=4'd2,song_3=4'd3,song_4=4'd4,song_5=4'd5,song_6=4'
 //happy_birthday
 
       song_2: begin
-        song_packed={ t9,t9,t9,t9,t9,t9,
+        song_packed={ t9,t9,t9,t9,t9,
         t,t3,t,t2,t,t1,t,t3,t,t4,t,t4,t,
         t6,t,t7,t,t1,t,t3,t,t5,t,t5,t,t5,
         t,t1,t,t2,t,t5,t,t6,t,t5,t,t5,
-        t,t7,t,t1,t,t5,t,t6,t,t5,t,t5//52  //556517 556521 5553176 443123
-};
+        t,t7,t,t1,t,t5,t,t6,t,t5,t,t5,t
+};//52  //556517 556521 5553176 443123
         time_continue={
-        ti1,ti1,ti1,ti1,ti1,ti1,
+        ti1,ti1,ti1,ti1,ti1,
         ti1,ti6,ti3,ti6,ti3,ti6,ti3,ti6,ti3,ti4,ti2,ti4,
         ti3,ti6,
         ti2,ti6,ti3,ti6,ti3,ti6,ti3,ti6,ti3,ti4,ti2,ti4,ti3,
         ti9,ti3,ti6,ti3,ti6,ti3,ti6,ti3,ti4,ti2,ti4,ti3,
-        ti9,ti3,ti6,ti3,ti6,ti3,ti6,ti3,ti4,ti2,ti4};
+        ti9,ti3,ti6,ti3,ti6,ti3,ti6,ti3,ti4,ti2,ti4,ti1};
 
                 octave_packed={
-ma, ma, ma, ma, ma, ma, 
+ ma, ma, ma, ma, ma, 
 ma, ma, ma, ma, ma, ma,ma, ma, ma, ma, ma, ma, 
  ma, ma, ma, lo, ma, ma,ma, ma, ma, ma, ma, lo, ma, lo, 
   ma, ma, ma, ma,ma, lo, ma, lo, ma, lo, ma, lo, 
-   ma, lo, ma, ma, ma, lo, ma, lo, ma, lo, ma, lo
+   ma, lo, ma, ma, ma, lo, ma, lo, ma, lo, ma, lo,ma
 
         };
 
@@ -88,18 +88,18 @@ ma, ma, ma, ma, ma, ma,ma, ma, ma, ma, ma, ma,
 //happy new year
       song_3: begin
         song_packed={
-        t1,t2,t,t7,
+        t2,t,t7,
         t,t5,t,t2,t,t3,t,t1,
         t,t1,t,t3,t,t2,t,t3,
         t,t4,t,t4,t,t3,t,t2,
         t,t2,t,t3,t,t4,
         t,t5,t,t5,t,t3,t,t1,
         t,t1,t,t3,t,t3,t,t3,
-        t,t5,t,t1,t,t1 //
+        t,t5,t,t1,t,t1,t 
         };
 
         time_continue={        
-        ti9,ti5,ti5,ti3,ti4,ti4,ti4,
+        ti5,ti5,ti3,ti4,ti4,ti4,
         ti6,ti3,ti6,ti3,ti4,ti4,ti4,   
         ti3,ti6,ti3,ti6,ti3,ti4,ti4,
         ti4,
@@ -108,17 +108,17 @@ ma, ma, ma, ma, ma, ma,ma, ma, ma, ma, ma, ma,
         ti3,ti9,ti4,ti4,
         ti3,ti6,ti3,ti6,ti3,ti4,ti4,ti4,
         ti3,ti6,ti3,ti6,ti3,ti4,ti4,ti4,
-        ti3,ti6,ti3,ti6,ti3,ti4};
+        ti3,ti6,ti3,ti6,ti3,ti4,ti9};
 
                         octave_packed={
-ma, ma, ma, lo, 
+ ma, ma, lo, 
 ma, lo, ma, ma, ma, ma, ma, ma, 
 ma, ma, ma, ma, ma, ma,ma, ma, 
  ma, ma, ma, ma, ma, ma, ma, ma,
 ma, ma, ma, ma, ma, ma, 
 ma, ma, ma, ma, ma, ma, ma, ma,
  ma, ma, ma, ma, ma, ma, ma, ma,
- ma, lo, ma, ma, ma, ma
+ ma, lo, ma, ma, ma, ma,ma
 
         };
         num=4'd3;

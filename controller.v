@@ -35,7 +35,7 @@ module Controller(
     output reg [6:0] led_out , 
     output reg [1:0] octave_out, //octave from auto mode or learn mode
     input wire [1:0] speed_select,
-    output wire [1:0] num_speed
+    input wire start
     );
  parameter mode_free=3'b100, mode_auto=3'b010, mode_learn=3'b001;
     wire [3:0] num_auto;
@@ -51,10 +51,19 @@ module Controller(
     .led_out(led_auto),
     .octave_auto(octave_auto),
     .num(num_auto),
-    .num_speed(num_speed)
+    .speed_select(speed_select),
+    .play_state(play_state)
     );
 
+reg play_state = 1'b0;//control begin
 
+    always @(posedge clk) begin
+        if (!reset) begin
+            play_state <= 0;
+        end else if (start) begin
+            play_state <= ~play_state;
+        end
+    end
 
    // Initialize for learn mode
             wire [3:0] num_learn;
@@ -96,7 +105,10 @@ module Controller(
                         end
 
             default: begin
-    
+                note_out <= 4'b0000;
+                led_out <= 7'b0000000;
+                num <= 4'b0000;
+                octave_out <= 2'b00;
             end
         endcase
     end
