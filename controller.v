@@ -38,11 +38,28 @@ module Controller(
     input wire start
     );
  parameter mode_free=3'b100, mode_auto=3'b010, mode_learn=3'b001;
+
+
+
+    wire[3:0]note_free;
+    wire[1:0]octave_free;
+    Mode_Free free_inst(
+    .clk(clk),
+    .reset(reset),
+    .write_on(write_on),
+    .keys(keys),
+    .song_select(song_select),
+    .note_to_play(note_free),
+    .octave(octave),
+    .octave_out(octave_free)
+    );
+
+
+ 
     wire [3:0] num_auto;
     wire [3:0] note_auto;
     wire [6:0] led_auto;
     wire [1:0]octave_auto;
-
     mode_auto auto_inst(
     .clk(clk),
     .reset(reset),
