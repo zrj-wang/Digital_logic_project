@@ -19,6 +19,7 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
+
 module Mode_Free(
  input wire clk,
    input wire write_on,
@@ -37,7 +38,7 @@ module Mode_Free(
     parameter RAM_DEPTH = 1024; // RAM 深度
     parameter ADDR_WIDTH = 10;  // 地址宽度，用于遍历
     
-reg [1:0] data_out_octave;
+  reg [1:0] data_out_octave;
    reg [Note_WIDTH-1:0] ram1 [0:RAM_DEPTH-1];
    reg [Time_WIDTH-1:0] ram2 [0:RAM_DEPTH-1];
    reg [Octave_WIDTH-1:0] ram3 [0:RAM_DEPTH-1];
@@ -49,8 +50,8 @@ reg [1:0] data_out_octave;
     wire [Note_WIDTH-1:0] data_out_note;
     wire [Time_WIDTH-1:0] data_out_time;
     wire [ADDR_WIDTH-1:0] addr_write;
-    reg checkNote;
-    reg checkTime;
+    wire checkNote;
+    wire checkTime;
      
      writeToRam write_to_ram(
      .clk(clk),
@@ -67,7 +68,7 @@ reg [1:0] data_out_octave;
      always @(posedge clk) begin
           data_out_octave<=octave;
      if(write_on)begin
-     if(checkNote==1 && checkTime==1)begin
+     if(checkNote==1'b1 && checkTime==1'b1)begin
      ram1[addr_write] <= data_out_note;
      ram2[addr_write] <= data_out_time;
      ram3[addr_write] <= data_out_octave;
