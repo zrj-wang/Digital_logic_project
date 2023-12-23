@@ -1,28 +1,15 @@
 module writeToRam (
- input wire clk,
-    input wire write_en,
-     input wire [6:0] keys,
-    input wire [1:0] data_in_octive,
-output reg [Note_WIDTH-1:0] ram1 [0:RAM_DEPTH-1],
-output reg [Time_WIDTH-1:0] ram2 [0:RAM_DEPTH-1],
-output reg [Octave_WIDTH-1:0] ram3 [0:RAM_DEPTH-1]
+   input wire clk,
+   input wire write_on,
+   input wire [6:0] keys,
+   input wire [1:0] data_in_octive,
+   output reg [3:0] data_out_note,
+   output reg [5:0] data_out_time,
+   output  reg checkNote,
+   output reg checkTime
 );
 
-
-reg [ADDR_WIDTH-1:0] addr1 = 0;
-reg [ADDR_WIDTH-1:0] addr2 = 0;
-reg [ADDR_WIDTH-1:0] addr3 = 0;
-
-
-parameter Note_WIDTH = 4;  // 根据需要调整数据宽度
-parameter Time_WIDTH = 6; 
-parameter Octave_WIDTH = 3;  // 根据需要调整数据宽度
-parameter RAM_DEPTH = 1024; // RAM 深度
-parameter ADDR_WIDTH = 10;  // 地址宽度，用于遍历
 parameter N = 32;
-
-
-
 //将开关值换为node
 reg [3:0]note;
 always@(*)begin
@@ -53,22 +40,16 @@ end
 //记录当前打开的开关值
 always @(posedge slow_clk) begin
     
-    if (write_en) begin
-    // 更新开关状态
-    switch_last <= switch_state;
-    switch_state <= note; // 假设最低位为开关状态
-    
+    if (write_on) begin 
     // 用条件语句模拟上升沿，当开关从关闭变为打开时记录数据
     if (switch_state && !switch_last) begin
-        ram1[addr1]<=note;
+       data_out_note<=note;
     end
     // 用条件语句模拟下降沿，当开关关闭时准备记录下一个数据
     else if (!switch_state && switch_last) begin
-            addr1 <= addr1 + 1;  
+            checkNote<=1'b1;  
          end
-
     end
-
 end
 
 
@@ -82,11 +63,7 @@ reg switch_last = 0;       // 上一个时钟周期的开关状态
 
 
 always @(posedge clk) begin
-    if (write_en) begin
-    // 更新开关状态
-    switch_last <= switch_state;
-    switch_state <= note; // 假设最低位为开关状态
-    
+    if (write_on) begin
     // 用条件语句模拟上升沿，当开关从关闭变为打开时开始计时
     if (switch_state && !switch_last) begin
         counter <= 0; // 重置计数器
@@ -97,31 +74,14 @@ always @(posedge clk) begin
     end
     // 用条件语句模拟下降沿，当开关关闭时停止计时并记录持续时间
     else if (!switch_state && switch_last) begin
-            ram2[addr2] <= counter; // 更新持续时间
-            addr2 <= addr2 + 1;  
+            data_out_time <= counter;
+            checkTime<=1'b1; // 更新持续时间 
          end
 
     end
 end
 
-
-//写入音符八度
-//记录当前打开的开关值
-always @(posedge slow_clk) begin
-    
-    if (write_en) begin
-    // 更新开关状态
-    switch_last <= switch_state;
-    switch_state <= note; // 假设最低位为开关状态
-    
-    // 用条件语句模拟上升沿，当开关从关闭变为打开时记录数据
-    if (switch_state && !switch_last) begin
-        ram3[addr3]<=data_in_octive;
-    end
-    // 用条件语句模拟下降沿，当开关关闭时准备记录下一个数据
-    else if (!switch_state && switch_last) begin
-            addr3 <= addr3 + 1;  
-         end
+endmodule
 
     end
 
