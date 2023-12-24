@@ -106,7 +106,8 @@ reg play_state = 1'b0;//control begin
     always @(posedge clk) begin
         case(mode)
             mode_free: begin
-                
+               note_out<=note_free;
+                octave_out<=octave_free;
             end
             mode_auto: begin
                 note_out <= note_auto;
