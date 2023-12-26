@@ -19,38 +19,41 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
+
 module Mode_Free(
  input wire clk,
    input wire write_on,
    input wire reset,
     input wire [6:0] keys,
-    input wire [2:0]song_select,
+    input wire [1:0]song_select,
    input wire [1:0] octave,
    input wire playRecord,
+   input wire selectSong,
    output reg[3:0] note_to_play,
    output reg [1:0]octave_out
-   
     );
     parameter Note_WIDTH = 4;  // 根据需要调整数据宽度
     parameter Time_WIDTH = 6; 
-    parameter Octave_WIDTH = 3;  // 根据需要调整数据宽度
+    parameter Octave_WIDTH = 2;  // 根据需要调整数据宽度
     parameter RAM_DEPTH = 1024; // RAM 深度
     parameter ADDR_WIDTH = 10;  // 地址宽度，用于遍历
-    
-reg [1:0] data_out_octave;
-   reg [Note_WIDTH-1:0] ram1 [0:RAM_DEPTH-1];
-   reg [Time_WIDTH-1:0] ram2 [0:RAM_DEPTH-1];
-   reg [Octave_WIDTH-1:0] ram3 [0:RAM_DEPTH-1];
+    reg write_current_song = 0; // 用于选择当前写入的歌曲
+    reg play_current_song = 0; // 用于选择当前播放的歌曲
+  reg [1:0] data_out_octave;
+//使用RAM储存歌曲信息：ram1代表note信息 ram2代表time信息 ram3代表octave信息
+   reg [Note_WIDTH-1:0] ram1[0:2] [0:RAM_DEPTH-1];
+   reg [Time_WIDTH-1:0] ram2[0:2] [0:RAM_DEPTH-1];
+   reg [Octave_WIDTH-1:0] ram3 [0:2][0:RAM_DEPTH-1];
    
-   reg [ADDR_WIDTH-1:0] addr1 = 0;
-   reg [ADDR_WIDTH-1:0] addr2 = 0;
-   reg [ADDR_WIDTH-1:0] addr3 = 0;
+   reg [0:2][ADDR_WIDTH-1:0] addr1 = 0;
+   reg [0:2][ADDR_WIDTH-1:0] addr2 = 0;
+   reg [0:2][ADDR_WIDTH-1:0] addr3 = 0;
     
     wire [Note_WIDTH-1:0] data_out_note;
     wire [Time_WIDTH-1:0] data_out_time;
     wire [ADDR_WIDTH-1:0] addr_write;
-    reg checkNote;
-    reg checkTime;
+    wire checkNote;
+    wire checkTime;
      
      writeToRam write_to_ram(
      .clk(clk),
@@ -62,35 +65,63 @@ reg [1:0] data_out_octave;
      .checkNote(checkNote),
      .checkTime(checkTime)
      );
-     
-     
+
+     //选择歌曲
+     always@(selectSong)begin
+     play_current_song <= (play_current_song + 1) % 3; // 切换到下一首歌曲播放
+     end
+
+     //写入歌曲信息
      always @(posedge clk) begin
           data_out_octave<=octave;
      if(write_on)begin
-     if(checkNote==1 && checkTime==1)begin
-     ram1[addr_write] <= data_out_note;
-     ram2[addr_write] <= data_out_time;
-     ram3[addr_write] <= data_out_octave;
+     if(checkNote==1'b1 && checkTime==1'b1)begin
+     ram1[write_current_song][addr_write] <= data_out_note;
+     ram2[write_current_song][addr_write] <= data_out_time;
+     ram3[write_current_song][addr_write] <= data_out_octave;
              end
            end      
          end
-         
-  reg i=0;
-  reg count1=0;
-always@(posedge clk )begin
-if(!reset)begin
-count1=count1+1;
-if(count1<=ram2[i])
-begin
-note_to_play<=ram1[i];
-octave_out=ram3[i];
+
+   //关闭录音键准备写入下一首歌
+     always@(negedge write_on)begin
+     write_current_song <= (write_current_song + 1) % 3; // 写到下一首歌曲
+     end
+
+//将开关值换为node
+reg [3:0]note;
+always@(*)begin
+    case(keys)
+    7'b0000001:note=4'b0001;
+    7'b0000010:note=4'b0010;
+    7'b0000100:note=4'b0011;
+    7'b0001000:note=4'b0100;
+    7'b0010000:note=4'b0101;
+    7'b0100000:note=4'b0110;
+    7'b1000000:note=4'b0111;
+   default
+    note=4'b0000;
+endcase
 end
-else  i<=i+1;
+
+//判断是否播放录音
+always@(playRecord)
+if(playRecord) begin
+  for (i = 0; i <= addr_read; i = i + 1) begin
+    for (j = 0; j <= ram2[play_current_song][i]; j = j + 1)begin
+    note_to_play<=ram1[play_current_song][i];
+    octave<=ram3[play_current_song][i];
+    end
 end
-else
-begin
- count1<=0;
- i<=0;
+end
+//如果不播放录音，自由输出
+else begin
+ note_to_play<=note;
+ octave_out<=octave;
+end
+   
+endmodule
+ 
  end
   end  
 endmodule
