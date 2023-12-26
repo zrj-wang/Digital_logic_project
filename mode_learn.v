@@ -149,10 +149,11 @@ always @(posedge clk, negedge reset) begin
                      if (play_position >= song_time-1) begin//
                         play_position <= 0; // begin from the start
                      end
-                     note_to_play <= song[play_position];
-                     octave_out <= octave[play_position];
+                     
                 end
             end
+                note_to_play <= song[play_position];
+                octave_out <= octave[play_position];
         end else
         if(switches[song[play_position]-1] && octave_learn==octave[play_position]) begin
             if (note_counter < second* time_mul ) begin
@@ -165,9 +166,10 @@ always @(posedge clk, negedge reset) begin
                 if (play_position >= song_time-1)begin //
                     play_position <= 0; // begin from the start
                 end
+                
+            end
                 note_to_play <= song[play_position];
                 octave_out <= octave[play_position];
-            end
         end
     end
 end
