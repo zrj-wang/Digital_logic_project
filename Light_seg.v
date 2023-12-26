@@ -21,7 +21,7 @@ parameter empty=8'b00000000;
 reg [7:0] char1, char2, char3, char4;
 reg [1:0] display_select;// 2-bit output for the digit select
 
-reg [7:0] seg_num; // 7-bit output for the segment pattern
+reg [7:0] seg_num; // 7-bit output for the segment patterna
 
     // Define the segment patterns for numbers 0-9 for a common cathode seven-segment display
     always @(*) begin

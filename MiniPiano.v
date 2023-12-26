@@ -28,7 +28,7 @@ module MiniPiano(
     output wire speaker,
     input wire start,
     input wire write_on,
-    input wire [2:0] song_select, //select song, next or previous
+    input wire [1:0] song_select, //select song, next or previous
     input wire [2:0] mode,    //  mode 100 free ; 010 auto; 001 learn
     input wire [1:0]octave, //choose the proper octave
     output wire [6:0] led, //control the led
@@ -43,6 +43,25 @@ module MiniPiano(
     output wire test 
 
     );
+    wire debounced_start;
+    wire [1:0] debounced_speed_select;
+    wire [1:0] debounced_song_select;
+    wire debounced_reset;
+
+
+debounce debounce_inst(
+    .clk(clk),
+    .reset(reset),
+    .start(start),
+    .speed_select(speed_select),
+    .song_select(song_select),
+    .debounced_start(debounced_start),
+    .debounced_speed_select(debounced_speed_select),
+    .debounced_song_select(debounced_song_select),
+    .debounced_reset(debounced_reset)
+);
+
+
     assign test = 1'b0;
 
     wire[1:0] num_speed; //show the speed of the song
@@ -64,7 +83,7 @@ module MiniPiano(
         .octave(octave),
         .octave_out(octave_auto),
         .speed_select(speed_select),
-        .num_speed(num_speed)
+        .start(start)
 
     );
     
@@ -93,8 +112,7 @@ module MiniPiano(
         .clk(clk),
         .reset(reset),
         .mode(mode),
-        .an_right(an_right),
-        .num_speed(num_speed)
+        .an_right(an_right)
     );
 
     // Other modules can be instantiated and connected similarly
