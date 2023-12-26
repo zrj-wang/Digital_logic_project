@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module Mode_Free(
+module mode_free(
  input wire clk,
    input wire write_on,
    input wire reset,
