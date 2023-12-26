@@ -45,9 +45,9 @@ module Mode_Free(
    reg [Time_WIDTH-1:0] ram2[0:2] [0:RAM_DEPTH-1];
    reg [Octave_WIDTH-1:0] ram3 [0:2][0:RAM_DEPTH-1];
    
-   reg [0:2][ADDR_WIDTH-1:0] addr1 = 0;
-   reg [0:2][ADDR_WIDTH-1:0] addr2 = 0;
-   reg [0:2][ADDR_WIDTH-1:0] addr3 = 0;
+   reg [ADDR_WIDTH-1:0] addr1[0:2] ;
+   reg [ADDR_WIDTH-1:0] addr2[0:2];
+   reg [ADDR_WIDTH-1:0] addr3[0:2];
     
     wire [Note_WIDTH-1:0] data_out_note;
     wire [Time_WIDTH-1:0] data_out_time;
@@ -103,14 +103,15 @@ always@(*)begin
     note=4'b0000;
 endcase
 end
-
+reg [31:0] i; // 在for循环之前声明i
+reg [31:0] j; // 在for循环之前声明i
 //判断是否播放录音
 always@(playRecord)
 if(playRecord) begin
-  for (i = 0; i <= addr_read; i = i + 1) begin
-    for (j = 0; j <= ram2[play_current_song][i]; j = j + 1)begin
+  for (i = 0; i < RAM_DEPTH; i = i + 1) begin
+    for (j = 0; j < ram2[play_current_song][i]; j = j + 1)begin
     note_to_play<=ram1[play_current_song][i];
-    octave<=ram3[play_current_song][i];
+    octave_out<=ram3[play_current_song][i];
     end
 end
 end
@@ -122,7 +123,3 @@ end
    
 endmodule
  
- end
-  end  
-endmodule
-    
