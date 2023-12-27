@@ -87,33 +87,6 @@ always @(posedge clk) begin
 end
 
 
-// //choose speed logic
-// always @(posedge clk) begin
-//   begin
-//         // check for song_select[0] and song_select[1] rising edges
-//         if (speed_select[0] == 1'b1 && prev_speed_select[0] == 1'b0) begin
-//             if (num_speed == speed_high) begin
-//                 num_speed <= speed_low;
-//             end else begin
-//                 num_speed <= num_speed + 1;
-//             end
-
-//         end
-        
-//         else if (speed_select[1] == 1'b1 && prev_speed_select[1] == 1'b0) begin
-//             if (num_speed == speed_low) begin
-//                 num_speed <= speed_high;
-//             end else begin
-//                 num_speed <= num_speed - 1;
-//             end
-
-//         end
-//         prev_speed_select <= speed_select; 
-//     end
-// end
-
-
-
 
 // if song_num =(1,3) ,use song from lib, else from mode_free
 // Instantiate the Lib, find the song
@@ -167,26 +140,6 @@ begin
         time_mul <= time_continue[play_position];
         num_speed<=speed_mid;
     end else begin
-        // check for song_select[0] and song_select[1] rising edges
-        if (speed_select[0] == 1'b1 && prev_speed_select[0] == 1'b0) begin
-            if (num_speed == speed_high) begin
-                num_speed <= speed_low;
-            end else begin
-                num_speed <= num_speed + 1;
-            end
-
-        end
-        
-        else if (speed_select[1] == 1'b1 && prev_speed_select[1] == 1'b0) begin
-            if (num_speed == speed_low) begin
-                num_speed <= speed_high;
-            end else begin
-                num_speed <= num_speed - 1;
-            end
-
-        end
-        prev_speed_select <= speed_select; 
-    end
 
     if(play_state==1'b1)begin
     begin
@@ -226,8 +179,32 @@ begin
     note_to_play <= song[play_position];
     octave_auto <= octave[play_position];
     end
+    end else begin
+                // check for song_select[0] and song_select[1] rising edges
+        if (speed_select[0] == 1'b1 && prev_speed_select[0] == 1'b0) begin
+            if (num_speed == speed_high) begin
+                num_speed <= speed_low;
+            end else begin
+                num_speed <= num_speed + 1;
+            end
+
+        end
+        
+        else if (speed_select[1] == 1'b1 && prev_speed_select[1] == 1'b0) begin
+            if (num_speed == speed_low) begin
+                num_speed <= speed_high;
+            end else begin
+                num_speed <= num_speed - 1;
+            end
+
+        end
+        prev_speed_select <= speed_select; 
+    end
+
+
     end
 end
+// only when playing song can we change speed
 
 
 endmodule

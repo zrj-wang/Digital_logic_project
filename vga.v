@@ -1,40 +1,20 @@
+
+
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 山东大学
-// Engineer: 周健平
-// 
-// Create Date: 2020/07/30 21:31:19
-// Design Name: 
-// Module Name: vga4
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 基于EGO1实现VGA图像显示--通过取字模软件生成需要显示的文字
-//然后再将其像素信息转换成所需的字库，该字库以十六进制编码的形式
-//记录每个像素点的亮灭信息。
-// 对于时钟分频、行同步显示、场同步信号可以作为显示文字、字符、字母类的通用代码
-//只需要对显示位置、每一行需要显示的位数进行修改即可。
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
 
-
-module vga(clk,rst_n,hsync,vsync,vga_r,vga_g,vga_b);
-    input clk;//系统时钟
-    input rst_n;//复位信号
-    output hsync;//行同步信号
-    output vsync;//场同步信号
-    output [3:0] vga_r;//VGA红色输出信号
-    output [3:0] vga_g;//VGA绿色输出信号
-    output [3:0] vga_b;//VGA蓝色输出信号
+module vga(
+    input clk,//系统时钟
+    input rst_n,//复位信号
+    output hsync,//行同步信号
+    output vsync,//场同步信号
+    output [3:0] vga_r,//VGA红色输出信号
+    output [3:0] vga_g,//VGA绿色输出信号
+    output [3:0] vga_b);//VGA蓝色输出信号
     reg [9:0]x_cnt; //行坐标
     reg [9:0]y_cnt; //列坐标
     reg clk_vga=0;  //vga时钟
     reg clk_cnt=0;  //分频计数
+
     always @(posedge clk or negedge rst_n)//实现对系统时钟的分频得到vga_clk用于VGA图像显示时钟信号
         begin
             if(!rst_n)
@@ -49,7 +29,7 @@ module vga(clk,rst_n,hsync,vsync,vga_r,vga_g,vga_b);
         end
  
     reg valid_yr;       //行显示有效信号
-    always @(posedge clk_vga or negedge rst_n)//480行
+    always @(posedge clk_vga , negedge rst_n)//480行
         begin
             if(!rst_n)
                 valid_yr<=1'b0;
@@ -60,7 +40,7 @@ module vga(clk,rst_n,hsync,vsync,vga_r,vga_g,vga_b);
         end
     wire valid_y=valid_yr;   
     reg valid_r;
-    always @(posedge clk_vga or negedge rst_n)//640列
+    always @(posedge clk_vga , negedge rst_n)//640列
         begin
             if(!rst_n)
                 valid_r<=1'b0;
@@ -71,7 +51,7 @@ module vga(clk,rst_n,hsync,vsync,vga_r,vga_g,vga_b);
         end
     wire valid=valid_r;
     
-    always @(posedge clk_vga or negedge rst_n)
+    always @(posedge clk_vga , negedge rst_n)
         begin
             if(!rst_n)
                 x_cnt<=10'd0;
@@ -80,7 +60,8 @@ module vga(clk,rst_n,hsync,vsync,vga_r,vga_g,vga_b);
             else
                 x_cnt<=x_cnt+1'b1;
         end
-    always @(posedge clk_vga or negedge rst_n)
+        
+    always @(posedge clk_vga , negedge rst_n)
         begin
             if(!rst_n)
                 y_cnt<=10'd0;
@@ -101,6 +82,8 @@ module vga(clk,rst_n,hsync,vsync,vga_r,vga_g,vga_b);
             else if(x_cnt==10'd96)
                 hsync_r<=1'b1;
         end
+
+
         
     always @(posedge clk_vga or negedge rst_n)
         begin
@@ -121,6 +104,7 @@ module vga(clk,rst_n,hsync,vsync,vga_r,vga_g,vga_b);
     //减去消隐区，转换成易于理解的640*480
     assign x_dis=x_cnt-10'd142;
     assign y_dis=y_cnt-10'd33;
+
     parameter   //FPGA四个字符的字库，若要显示其他字符，利用字符取模软件生成字库即可
         char_line00 = 128'hFFFFFFC07FFC00001FFF0000007C0000,
         char_line01 = 128'hFFFFFFC07FFE00003FFF800000FE0000,
@@ -156,7 +140,7 @@ module vga(clk,rst_n,hsync,vsync,vga_r,vga_g,vga_b);
         char_line1f = 128'hF8000000780000001FFE0007F0001EC0;
     
     reg [6:0]char_bit;
-    always @(posedge clk_vga or negedge rst_n)//在640*480阵列中选取位置显示字符“FPGA”
+    always @(posedge clk_vga or negedge rst_n)//在640*480阵列中选取位置显示字符"FPGA"
         begin
             if(!rst_n)
                 char_bit<=8'h7f;

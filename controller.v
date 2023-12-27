@@ -60,6 +60,8 @@ module Controller(
     wire [3:0] note_auto;
     wire [6:0] led_auto;
     wire [1:0]octave_auto;
+    
+reg play_state = 1'b0;//control begin
     mode_auto auto_inst(
     .clk(clk),
     .reset(reset),
@@ -72,7 +74,6 @@ module Controller(
     .play_state(play_state)
     );
 
-reg play_state = 1'b0;//control begin
 
     always @(posedge clk) begin
         if (!reset) begin
@@ -110,9 +111,12 @@ reg play_state = 1'b0;//control begin
                 octave_out<=octave_free;
             end
             mode_auto: begin
+                num <=num_auto;
+                
+
                 note_out <= note_auto;
                 led_out <= led_auto;
-                num <=num_auto;
+                
                 octave_out <= octave_auto;
             end
             mode_learn: begin
