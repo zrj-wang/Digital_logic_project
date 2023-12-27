@@ -72,13 +72,13 @@ reg play_state = 1'b0;//control begin
     end
 
  
-  wire[3:0]note_free1;
+    wire[3:0]note_free1;
     wire[1:0]octave_free1;
     wire[3:0]note_free2;
     wire[1:0]octave_free2;
-    wire [3:0]selectSong_free=num;
+    wire [3:0]selectSong_free=num_auto;
     wire playState_free = play_state;
-    reg [6:0] led_out_free;
+    wire [6:0] led_out_free;
     
     mode_free free_inst(
     .clk(clk),
@@ -92,9 +92,10 @@ reg play_state = 1'b0;//control begin
     .led_out(led_out_free),
     .note_to_play1(note_free1),
     .octave_out1(octave_free1),
-    .note_to_play1(note_free2),
-    .octave_out1(octave_free2)
+    .note_to_play2(note_free2),
+    .octave_out2(octave_free2)
     );
+
 
 
    // Initialize for learn mode
