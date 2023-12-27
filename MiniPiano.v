@@ -68,9 +68,11 @@ debounce debounce_inst(
     wire [3:0] note;
     wire[1:0] octave_auto;
     wire [3:0] num;
+    wire [3:0] score;
     
     // Instantiate the Controller
     Controller controller_inst(
+        .score_out(score),
         .clk(clk),
         .keys(keys),
         .write_on(write_on),
@@ -105,6 +107,7 @@ debounce debounce_inst(
     );
 
     Light_seg light_seg_inst(
+        .score(score),
         .num(num),
         .seg1(light_seg),
         .seg(light_seg_left),
