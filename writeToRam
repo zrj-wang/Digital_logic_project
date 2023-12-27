@@ -26,14 +26,16 @@ always@(*)begin
 endcase
 end
 //增加一个debounding方法去抗抖动,记录当前按键值
-reg [N-1:0] counter = 0;  // N 是计数器的位宽
+reg [N-1:0] counter1 = 0;  // N 是计数器的位宽
 reg slow_clk = 0;
 parameter DIVIDE_VALUE=100000;//设置慢速时钟的频率为clk的十万分之一，也就是10Hz
 always @(posedge clk) begin
-    counter <= counter + 1;
-    if (counter == DIVIDE_VALUE) begin
+    if (counter1 == DIVIDE_VALUE-1) begin
         slow_clk <= ~slow_clk;
-        counter <= 0;
+        counter1 <= 0;
+    end
+    else begin
+     counter1 <= counter1 + 1;
     end
 end
 reg switch_state = 0;      // 当前开关状态
