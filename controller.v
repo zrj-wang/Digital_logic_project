@@ -128,9 +128,10 @@ reg play_state = 1'b0;//control begin
                      end
     endcase
         case(mode)
-            mode_free: begin
-               note_out<=note_free;
-                octave_out<=octave_free;
+                 mode_free: begin
+               note_out<=note_free1;
+                octave_out<=octave_free1;
+                led_out<=led_out;
             end
             mode_auto: begin
                 num <=num_auto;
