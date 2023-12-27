@@ -32,7 +32,7 @@ module mode_free(
    output reg [6:0] led_out,
    output reg[3:0] note_to_play1,
    output reg [1:0]octave_out1,
-      output reg[3:0] note_to_play2,
+    output reg[3:0] note_to_play2,
    output reg [1:0]octave_out2
     );
     
@@ -189,14 +189,11 @@ reg [31:0] j=0; // 在for循环之前声明i
 //判断是否播放录音
 always@(posedge middleslow_clk)
 if(playState1) begin
-  for (;i < RAM_DEPTH; i = i + 1) begin
-    for (; j < ram2[play_current_song][i]; j = j + 1)begin
+ 
     note_to_play2<=ram1[play_current_song][i];
     octave_out2<=ram3[play_current_song][i];
-    end
-    j<=0;
-end
-i<=0;
+   j<=j+1;
+   i<=i+1;
 end
 else begin 
  note_to_play2<=3'b000;
