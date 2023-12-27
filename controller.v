@@ -41,19 +41,7 @@ module Controller(
 
 
 
-    wire[3:0]note_free;
-    wire[1:0]octave_free;
-    Mode_Free free_inst(
-    .clk(clk),
-    .reset(reset),
-    .write_on(write_on),
-    .keys(keys),
-    .song_select(song_select),
-    .note_to_play(note_free),
-    .octave(octave),
-    .octave_out(octave_free)
-    );
-
+    
 
  
     wire [3:0] num_auto;
@@ -83,6 +71,32 @@ reg play_state = 1'b0;//control begin
         end
     end
 
+ 
+  wire[3:0]note_free1;
+    wire[1:0]octave_free1;
+    wire[3:0]note_free2;
+    wire[1:0]octave_free2;
+    wire [3:0]selectSong_free=num;
+    wire playState_free = play_state;
+    reg [6:0] led_out_free;
+    
+    mode_free free_inst(
+    .clk(clk),
+    .write_on(write_on),
+    .storeRecord(start),
+    .keys(keys),
+    .song_select(song_select),
+    .octave(octave),
+    .playState(playState_free),
+    .selectSong(selectSong_free),
+    .led_out(led_out_free),
+    .note_to_play1(note_free1),
+    .octave_out1(octave_free1),
+    .note_to_play1(note_free2),
+    .octave_out1(octave_free2)
+    );
+
+
    // Initialize for learn mode
             wire [3:0] num_learn;
             wire [3:0] note_learn;
@@ -105,7 +119,7 @@ reg play_state = 1'b0;//control begin
 
 
     always @(posedge clk) begin
-      case(num)
+     case(num_auto)
              4'b0100,4'b0101,4'b0110:
              begin note_out <= note_free2;
                      led_out <= led_out_free;
