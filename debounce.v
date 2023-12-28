@@ -9,8 +9,8 @@ module debounce (
     output reg [1:0] debounced_speed_select,
     output reg debounced_reset
 );
+`include "par.v"
 
-parameter DEBOUNCE_DELAY = 100000; 
 
 reg [19:0] counter_start = 0;
 reg [19:0] counter_song_select_0 = 0;

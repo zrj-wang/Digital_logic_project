@@ -58,12 +58,15 @@ module Controller(
 //    );
 
 
+//use wire to connect mode, then choose which mode we will use
  
     wire [3:0] num_auto;
     wire [3:0] note_auto;
     wire [6:0] led_auto;
     wire [1:0]octave_auto;
     reg play_state = 1'b0;//control begin
+
+
     mode_auto auto_inst(
     .clk(clk),
     .reset(reset),
@@ -137,7 +140,7 @@ module Controller(
                                   );
           
 
-
+// choose the mode
     always @(posedge clk) begin
         case(mode)
 //            mode_free: begin
@@ -169,10 +172,10 @@ module Controller(
                 end
                         end
             default: begin
-                note_out <= 4'b0000;
-                led_out <= 7'b0000000;
-                num <= 4'b0000;
-                octave_out <= 2'b00;
+                note_out <= t;
+                led_out <= led8;
+                num <= t;
+                octave_out <= ma;
             end
         endcase
     end

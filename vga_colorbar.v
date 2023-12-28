@@ -12,6 +12,7 @@ module vga_colorbar(
     output wire       vsync,
     output wire  [11:0] vga_rgb
 );
+`include "par.v"
 
 
 wire        vga_clk;
@@ -27,7 +28,8 @@ assign  rst_n = (sys_rst_n && locked);
 
 
 
-clk_wiz_0 clk_wiz_inst//use ip core to generate 25MHz clock
+//use ip core to generate 25MHz clock
+clk_wiz_0 clk_wiz_inst
 (
   // Clock out ports  
   .clk_out1(vga_clk),

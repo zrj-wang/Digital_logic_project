@@ -1,13 +1,13 @@
 
     // Parameter declarations
     parameter mode_free=3'b100, mode_auto=3'b010, mode_learn=3'b001;
-    parameter t0=4'b0001, t1=4'b0001, t2=4'b0101, t3=4'b0101, t4=4'b0110, t5=4'b0110, t6=4'b0101, t7=4'b0100, t8=4'b0100, t9=4'b0011, t10=4'b0011, t11=4'b0010, t12=4'b0010, t13=4'b0001, t14=4'b0101, t15=4'b0101, t16=4'b0100, t17=4'b0100, t18=4'b0011, t19=4'b0011, t20=4'b0010, t21=4'b0101, t22=4'b0101, t23=4'b0100, t24=4'b0100, t25=4'b0011, t26=4'b0011, t27=4'b0010;
     parameter note_duration = 500000;
     parameter Half_second = 50_000_000;
 
 parameter song_1=4'd1, song_2=4'd2,song_3=4'd3,song_4=4'd4,song_5=4'd5,song_6=4'd6; 
 parameter speed_mid=2'b01, speed_low=2'b00, speed_high=2'b10;
 
+parameter do=381680, re=340136, mi=303030, fa=285714, so=255102, la=227273, si=202429;
 
   parameter t=4'b0000,t1=4'b0001, t2=4'b0010, t3=4'b0011, t4=4'b0100,
   t5=4'b0101, t6=4'b0110, t7=4'b0111, t9=4'b1111;
@@ -32,7 +32,52 @@ parameter speed_mid=2'b01, speed_low=2'b00, speed_high=2'b10;
 parameter empty=8'b00000000;
 
 
+
+
+
+        parameter score1=4'b0001,
+        score2=4'b0010,
+        score3=4'b0100,
+        score4=4'b1000;
+
 parameter DEBOUNCE_DELAY = 100000; 
+
+
+
+
+parameter H_VALID = 10'd640,
+          V_VALID = 10'd480;
+
+
+parameter   RED     = 12'hF80,
+            ORANGE  = 12'hFC0,
+            YELLOW  = 12'hFFE,
+            GREEN   = 12'h07E,
+            CYAN    = 12'h07F,
+            BLUE    = 12'h01F,//红色？？？
+            PURPPLE = 12'hF81,
+            BLACK   = 12'h000,
+            WHITE   = 12'hFFF,
+            GRAY    = 12'hD69;
+
+
+
+            parameter H_SYNC   = 10'd96,
+          H_BACK   = 10'd40,
+          H_LEFT   = 10'd8,
+          H_VALID  = 10'd640,
+          H_RIGHT  = 10'd8,
+          H_FRONT  = 10'd8,
+          H_TOTAL  = 10'd800;
+
+parameter V_SYNC   = 10'd2,
+          V_BACK   = 10'd25,
+          V_TOP    = 10'd8,
+          V_VALID  = 10'd480,
+          V_BOTTOM = 10'd8,
+          V_FRONT  = 10'd2,
+          V_TOTAL  = 10'd525;
+
 
 
 

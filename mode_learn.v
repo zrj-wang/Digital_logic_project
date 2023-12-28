@@ -32,13 +32,7 @@ module mode_learn(
     output reg [1:0] octave_out // Output the octave value
 );
 
-parameter second = 10000000, song_time=56,music0=4'b0000,
- music1=4'b0001, music2=4'b0010,music3=4'b0011,music4=4'b0100,music5=4'b0101,
- music6=4'b0110,music7=4'b0111,music9=4'b1111,
- led1=7'b0000001,led2=7'b0000010,led3=7'b0000100,led4=7'b0001000,led5=7'b0010000,
- led6=7'b0100000,led7=7'b1000000,led8=7'b0000000;
 
-parameter song_1=4'd1, song_2=4'd2,song_3=4'd3,song_4=4'd4,song_5=4'd5,song_6=4'd6; 
 // only seven now, but not enough
 // Arrays to store song data
 wire [3:0] song[song_time-1:0];

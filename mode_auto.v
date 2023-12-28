@@ -136,6 +136,9 @@ begin
         note_counter <= 0;
         time_mul <= time_continue[play_position];
         num_speed<=speed_mid;
+        led_out<=led8;
+        octave_auto<=octave[play_position];
+        note_to_play<=song[play_position];
     end else begin
 
     if(play_state==1'b1)begin//on behalf of start or pause

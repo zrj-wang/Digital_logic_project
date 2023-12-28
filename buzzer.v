@@ -13,13 +13,16 @@ reg [31:0] counter;
 reg pwm;
 
 // Base frequencies for notes
-assign base_frequencies[1] = 381680; // Frequency for 'do'
-assign base_frequencies[2] = 340136; // Frequency for 're'
-assign base_frequencies[3] = 303030; // Frequency for 'mi'
-assign base_frequencies[4] = 285714; // Frequency for 'fa'
-assign base_frequencies[5] = 255102; // Frequency for 'so'
-assign base_frequencies[6] = 227273; // Frequency for 'la'
-assign base_frequencies[7] = 202429; // Frequency for 'si'
+assign base_frequencies[1] = do; // Frequency for 'do'
+assign base_frequencies[2] = re; // Frequency for 're'
+assign base_frequencies[3] = mi; // Frequency for 'mi'
+assign base_frequencies[4] = fa; // Frequency for 'fa'
+assign base_frequencies[5] = so; // Frequency for 'so'
+assign base_frequencies[6] = la; // Frequency for 'la'
+assign base_frequencies[7] = si; // Frequency for 'si'
+
+
+
 
 initial begin
     pwm = 0;

@@ -56,21 +56,23 @@ reg [7:0] seg_user;
             4'd7: seg_num = num7; // 7
             4'd8: seg_num = num8; // 8
             4'd9: seg_num = num9; // 9
-            default: seg_num = 8'b00000000; // Off or invalid input
+            default: seg_num = empty; // Off or invalid input
         endcase
+
+
         case(score)
-            4'b0001:seg_score = c;
-            4'b0010:seg_score = b;
-            4'b0100:seg_score = a;
-            4'b1000:seg_score = s;
-            default: seg_score =8'b00000000;
+            score1:seg_score = c;
+            score2:seg_score = b;
+            score3:seg_score = a;
+            score4:seg_score = s;
+            default: seg_score =empty;
         endcase
         case(score_user)
-                    4'b0001:seg_score_user = c;
-                    4'b0010:seg_score_user = b;
-                    4'b0100:seg_score_user = a;
-                    4'b1000:seg_score_user = s;
-                    default: seg_score_user =8'b00000000;
+                    score1:seg_score_user = c;
+                    score2:seg_score_user = b;
+                    score3:seg_score_user = a;
+                    score4:seg_score_user = s;
+                    default: seg_score_user =empty;
                 endcase
          if(user) begin
          seg_user=a;
@@ -111,7 +113,7 @@ assign refresh_tick = (refresh_counter == 0); // refresh_tick is high for one cl
 //choose the seg
 always @(posedge clk or posedge reset) begin
     if (!reset) begin
-        display_select <= 2'b00;
+        display_select <= speed_low;
     end else if (refresh_tick) begin
         display_select <= display_select + 1;
     end
@@ -213,8 +215,8 @@ always @(posedge clk )
                                                    end
             default: begin
                 // Mode is not 3'b010, keep outputs low
-                seg1 <= 8'b00000000;
-                seg <= 8'b00000000;
+                seg1 <= empty;
+                seg <= empty;
                 an <= 4'b0000;
                 an_right <= 4'b0000;
             end
