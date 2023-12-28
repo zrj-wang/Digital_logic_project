@@ -6,17 +6,10 @@ module Light_seg (
     input wire [2:0] mode,
     output reg [7:0] seg1,   // show right score, speed, song
     output reg [7:0] seg,   //show name   
-    output reg [3:0] an,
+    output reg [3:0] an, // control the left seg
     output reg [3:0] an_right
 );
-parameter s=8'b01001001,t=8'b00001111,a=8'b01110111,r=8'b01000110;
-parameter b=8'b00011111,d=8'b00111101,y=8'b00111011;
-parameter e=8'b01001111;
-parameter num0=8'b01111111,num1=8'b00110000,num2=8'b01101101,num3=8'b01111001;
-parameter num4=8'b00110011,num5=8'b01011011,num6=8'b01011111,num7=8'b01110000;
-parameter num8=8'b01111111,num9=8'b01111011;   //{dot,a,b,c,d,e,f,g}
-parameter speed_mid=2'b01, speed_low=2'b00, speed_high=2'b10;
-parameter empty=8'b00000000;
+`include "par.v"
 
 reg [7:0] char1, char2, char3, char4;
 reg [1:0] display_select;// 2-bit output for the digit select
@@ -81,9 +74,13 @@ always @(posedge clk or posedge reset) begin
         end
     end
 end
+// refresh_tick is high for one clock cycle every 199999 clock cycles
+
+
 
 assign refresh_tick = (refresh_counter == 0); // refresh_tick is high for one clock cycle every 199999 clock cycles
 
+//choose which seg to display 
 //choose the seg
 always @(posedge clk or posedge reset) begin
     if (!reset) begin
@@ -92,6 +89,8 @@ always @(posedge clk or posedge reset) begin
         display_select <= display_select + 1;
     end
 end
+
+
 
 // control the seg
 always @(posedge clk )

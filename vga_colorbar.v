@@ -1,28 +1,12 @@
 `timescale 1ns / 1ps
-//
-// Company: 
-// Engineer: 
-// 
-// Create Date: 2021/08/26 20:23:04
-// Design Name: 
-// Module Name: vga_colorbar
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//
+
 
 
 module vga_colorbar(
     input wire        sys_clk,
     input wire        sys_rst_n,
+    input wire [6:0] status,
+    input wire [3:0]  num,
 
     output wire       hsync,
     output wire       vsync,
@@ -43,7 +27,7 @@ assign  rst_n = (sys_rst_n && locked);
 
 
 
-clk_gen clk_gen_inst
+clk_wiz_0 clk_wiz_inst//use ip core to generate 25MHz clock
 (
   // Clock out ports  
   .clk_out1(vga_clk),
@@ -73,7 +57,8 @@ vga_pic vga_pic_inst
     .sys_rst_n(rst_n),
     .pix_x(pix_x),
     .pix_y(pix_y),
-
+    .status(status),
+    .num(num),
     .pix_data(pix_data)
 );
 endmodule

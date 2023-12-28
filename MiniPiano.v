@@ -40,7 +40,12 @@ module MiniPiano(
     input wire[1:0] speed_select, //select the speed of the song
     
 
-    output wire test 
+    output wire test ,
+
+
+    output wire       hsync,
+    output wire       vsync,
+    output wire  [11:0] vga_rgb
 
     );
     wire debounced_start;
@@ -49,6 +54,7 @@ module MiniPiano(
     wire debounced_reset;
 
 
+//module for debounce
 debounce debounce_inst(
     .clk(clk),
     .reset(reset),
@@ -69,21 +75,21 @@ debounce debounce_inst(
     wire[1:0] octave_auto;
     wire [3:0] num;
     
-    // Instantiate the Controller
+    //module for controller, control the mode
     Controller controller_inst(
         .clk(clk),
         .keys(keys),
         .write_on(write_on),
         .note_out(note),
-        .reset(reset),
+        .reset(debounced_reset),
         .mode(mode),
-        .song_select(song_select),
+        .song_select(debounced_song_select),
         .led_out(led),
         .num(num),
         .octave(octave),
         .octave_out(octave_auto),
-        .speed_select(speed_select),
-        .start(start)
+        .speed_select(debounced_speed_select),
+        .start(debounced_start)
 
     );
     
@@ -98,12 +104,9 @@ debounce debounce_inst(
         .mode(mode)
     );
 
-    // Instantiate the Led module
-    Led led_inst(
-        .leds(led)
-        // Connect other necessary ports
-    );
 
+   
+//module for light_seg
     Light_seg light_seg_inst(
         .num(num),
         .seg1(light_seg),
@@ -114,6 +117,17 @@ debounce debounce_inst(
         .mode(mode),
         .an_right(an_right)
     );
+
+
+    vga_colorbar vag_inst(
+    .sys_clk(clk),
+    .sys_rst_n(reset),
+    .hsync(hsync),
+    .vsync(vsync),
+    .vga_rgb(vga_rgb),
+    .status(led),
+    .num(num)
+    )
 
     // Other modules can be instantiated and connected similarly
 
