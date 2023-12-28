@@ -30,7 +30,7 @@ reg [7:0] seg_user;
             4'd1: begin
                 seg_num = num1; // 1
                 char1 = s;
-                char2 = t;
+                char2 = tt;
                 char3 = a;
                 char4 = r;
             end

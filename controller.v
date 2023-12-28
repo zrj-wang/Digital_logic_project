@@ -40,7 +40,6 @@ module Controller(
     input wire user,
     output reg [3:0] score_user
     );
- parameter mode_free=3'b100, mode_auto=3'b010, mode_learn=3'b001,mode_competition=3'b011;
 
 
 

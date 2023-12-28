@@ -13,7 +13,6 @@ parameter do=381680, re=340136, mi=303030, fa=285714, so=255102, la=227273, si=2
   t5=4'b0101, t6=4'b0110, t7=4'b0111, t9=4'b1111;
   parameter ti1=4'd1,ti2=4'd2,ti3=4'd3,ti4=4'd4,ti5=4'd5,ti6=4'd6,ti7=4'd7,ti8=4'd8,ti9=4'd9;
 
-parameter song_1=4'd1, song_2=4'd2,song_3=4'd3,song_4=4'd4,song_5=4'd5,song_6=4'd6; 
   parameter lo=2'b01, hi=2'b10, ma=2'b00;
 
  parameter second = 10000000, song_time=56,music0=4'b0000,
@@ -22,13 +21,12 @@ parameter song_1=4'd1, song_2=4'd2,song_3=4'd3,song_4=4'd4,song_5=4'd5,song_6=4'
  led1=7'b0000001,led2=7'b0000010,led3=7'b0000100,led4=7'b0001000,led5=7'b0010000,
  led6=7'b0100000,led7=7'b1000000,led8=7'b0000000;
 
-parameter s=8'b01001001,t=8'b00001111,a=8'b01110111,r=8'b01000110;
+parameter s=8'b01001001,tt=8'b00001111,a=8'b01110111,r=8'b01000110;
 parameter b=8'b00011111,d=8'b00111101,y=8'b00111011;
 parameter e=8'b01001111;
 parameter num0=8'b01111111,num1=8'b00110000,num2=8'b01101101,num3=8'b01111001;
 parameter num4=8'b00110011,num5=8'b01011011,num6=8'b01011111,num7=8'b01110000;
 parameter num8=8'b01111111,num9=8'b01111011;   //{dot,a,b,c,d,e,f,g}
-parameter speed_mid=2'b01, speed_low=2'b00, speed_high=2'b10;
 parameter empty=8'b00000000;
 
 
@@ -42,11 +40,6 @@ parameter empty=8'b00000000;
 
 parameter DEBOUNCE_DELAY = 100000; 
 
-
-
-
-parameter H_VALID = 10'd640,
-          V_VALID = 10'd480;
 
 
 parameter   RED     = 12'hF80,
