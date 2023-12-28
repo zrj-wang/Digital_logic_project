@@ -101,21 +101,21 @@ always @(posedge vga_clk or negedge sys_rst_n) begin
     end
 end else begin
         // 在右侧区域显示图案的逻辑
-        relative_x = pix_x - (H_VALID * 7 / 10);
-        relative_y = pix_y;
+        relative_x <= pix_x - (H_VALID * 7 / 10);
+        relative_y <= pix_y;
 
         // 设定每个字符的宽度
         if (num == 4'd1) begin
-            char_width = 32 * 3; // 小星星有3个字符
+            char_width <= 32 * 3; // 小星星有3个字符
         end else begin
-            char_width = 32 * 4; // 其他图案有4个字符
+            char_width <= 32 * 4; // 其他图案有4个字符
         end
 
-        max_width = char_width; // 根据字符数设置最大宽度
+        max_width <= char_width; // 根据字符数设置最大宽度
 
         if (relative_y < 32 && relative_x < max_width) begin
             // 根据字符宽度计算索引
-            index = relative_y * max_width + relative_x;
+            index <= relative_y * max_width + relative_x;
 
             case (num)
                 4'd1: begin
