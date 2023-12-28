@@ -42,10 +42,10 @@ module mode_free(
     parameter RAM_DEPTH = 32; // RAM 深度
     parameter ADDR_WIDTH = 10;  // 地址宽度，用于遍历
     parameter  led1=7'b0000001,led2=7'b0000010,led3=7'b0000100,led4=7'b0001000,led5=7'b0010000,
-    led6=7'b0100000,led7=7'b1000000,led8=7'b0000000,led_for_store=7'b1111111,led_for_delete=7'b0001000;
+    led6=7'b0100000,led7=7'b1000000,led8=7'b0000000,led_for_delete=7'b1111111;
     
     reg playState1;
-   reg write_current_song = 0; // 用于选择当前写入的歌曲
+   reg [1:0]write_current_song = 0; // 用于选择当前写入的歌曲
    reg play_current_song = 0; // 用于选择当前播放的歌曲
    reg [1:0] data_out_octave;
 //使用RAM储存歌曲信息：ram1代表note信息 ram2代表time信息 ram3代表octave信息
@@ -59,7 +59,7 @@ module mode_free(
     
     wire [Note_WIDTH-1:0] data_out_note;
     wire [Time_WIDTH-1:0] data_out_time;
-    wire [ADDR_WIDTH-1:0] addr_write;
+    reg [ADDR_WIDTH-1:0] addr_write;
     wire checkNote;
     wire checkTime;
      
@@ -91,11 +91,12 @@ end
      //写入歌曲信息
      always @(posedge clk) begin
           data_out_octave<=octave;
-     if(write_on)begin
+     if(write_on && addr_write<=2^(ADDR_WIDTH-1))begin
      if(checkNote==1'b1 && checkTime==1'b1)begin
      ram1[write_current_song][addr_write] <= data_out_note;
      ram2[write_current_song][addr_write] <= data_out_time;
      ram3[write_current_song][addr_write] <= data_out_octave;
+     addr_write<=addr_write+1;
              end
            end      
          end
@@ -107,31 +108,44 @@ end
      write_current_song <= (write_current_song + 1) % 3; // 写到下一首歌曲
      end
    
-//使用超慢时钟来确定是否存储当前歌曲
+//使用时钟来确定是否存储当前歌曲
      reg [31:0] counter1 = 0;  // N 是计数器的位宽
-     reg superslow_clk = 0;
-     parameter DIVIDE_VALUE1=1500000;//设置慢速时钟的频率为clk的一百五十万分之一，也就是1.5秒一次升降沿
+     reg store_clk = 0;
+     parameter DIVIDE_VALUE1=200000;//设置慢速时钟的频率为clk的二十万分之一，也就是0.2秒一次升降沿
      always @(posedge clk) begin
          if (counter1 == DIVIDE_VALUE1-1) begin
-             superslow_clk <= ~superslow_clk;
+             store_clk <= ~store_clk;
              counter1 <= 0;
          end
          else begin
           counter1 <= counter1 + 1;
+          store_clk<=0;
          end
      end
-//如果按键超过三秒，必存储到音乐库,如果没到三秒，不存储该录音
-always@(posedge superslow_clk)begin
-if(storeRecord)begin
- write_current_song <= write_current_song ;
- led_out=led_for_store;//用以指示已存储
-end
-else begin
- write_current_song <= (write_current_song + 2) % 3;
-  led_out=led_for_delete;//用以指示放弃当前存储
-end
-end
+     reg delete=0;
+//如果按键超过两秒，存储录音,如果没到两秒，不存储该录音
+reg [3:0] press_timer; // 4位计时器，用于计时按键按下的时间
 
+always @(posedge store_clk) begin
+    if (storeRecord) begin
+        // 如果按钮按下，递增计时器
+        if (press_timer < 4'b1110) begin
+            press_timer <= press_timer + 1;
+        end
+    end 
+    else begin
+        // 如果按钮未按下，重置计时器
+        press_timer <= 4'b0000;
+    end
+
+    // 检查计时器是否超过两秒，如果是，则设置 delete 为1，否则设置为0
+    if (press_timer >= 4'b1010) begin
+        delete = 1;
+        addr_write<=0;
+    end else begin
+        delete = 0;
+    end
+end
 
 //将开关值换为node
 reg [3:0]note;
@@ -144,16 +158,32 @@ always@(*)begin
     7'b0010000:begin note=4'b0101; led_out=led5; end
     7'b0100000:begin note=4'b0110; led_out=led6; end
     7'b1000000:begin note=4'b0111; led_out=led7; end
-   default
+   default begin
     note=4'b0000;
+    led_out=led8;
+    end
 endcase
+if(delete==1)
+led_out=led_for_delete;//用以指示放弃当前存储
 end
 
 
+
+//熄灭指示灯
+parameter DIVIDE_VALUE=100000;//设置慢速时钟的频率为clk的十万分之一，也就是10Hz
+reg[31:0] countDelete=0;
+always@(posedge clk)begin
+if(delete)begin
+    if (countDelete == DIVIDE_VALUE-1) begin
+        countDelete <= 0;
+    end
+    else begin
+     countDelete <= countDelete + 1;end
+    end
+    end
 //增加一个debounding方法去抗抖动,记录当前按键值
 reg [31:0] counter = 0;  // N 是计数器的位宽
 reg slow_clk = 0;
-parameter DIVIDE_VALUE=100000;//设置慢速时钟的频率为clk的十万分之一，也就是10Hz
 reg [31:0] counter_middle = 0;  // N 是计数器的位宽
 reg middleslow_clk = 0;
 parameter DIVIDE_VALUE_middle=500000;//设置中等慢速时钟的频率为clk的五十万分之一，也就是2Hz
