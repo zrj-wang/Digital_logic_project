@@ -6,6 +6,7 @@ module Buzzer (
     input wire [1:0] octave, // Octave selection: 01 for lower, 10 for higher, else standard
     input wire [1:0] octave_auto
 );
+`include "par.v"
 
 reg [31:0] frequency;
 wire [31:0] base_frequencies [7:0];

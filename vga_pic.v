@@ -29,7 +29,6 @@ always @(posedge vga_clk or negedge sys_rst_n) begin
         pix_data <= 12'h000; // BLACK
     end else if (pix_x < (H_VALID * 7 / 10)) begin
     // the first 7/10 of the screen is used to display the color bar
-    //  1 white line
     if (pix_x < (H_VALID >> 3) + (H_VALID >> 4)) begin
         pix_data <= status[0] ? 12'h000 : 12'hFFF; // WHITE
     end 
