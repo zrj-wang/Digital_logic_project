@@ -23,20 +23,20 @@
  
 module mode_competition(
     input wire clk, // Clock signal
-    input wire [1:0] song_select, // choose song
-    input wire [6:0] switches, // 7个开关输入
-    input wire reset,
-    input wire [1:0]octave_competition, //choose the proper octave
-    output reg [3:0] note_to_play, // out_put to buzzer
-    output reg [6:0] led_out,
-    output reg [1:0] octave_out ,
-    output wire[3:0] num,
-    input wire [1:0] speed_select,
-    output reg [3:0] score,
-    input wire play_state,
-    input wire user,
-    output reg [3:0] score_A,
-    output reg [3:0] score_B
+    input wire [1:0] song_select, // Input to choose song
+    input wire [6:0] switches, // Input from 7 switches
+    input wire reset, // Reset signal
+    input wire [1:0] octave_competition, // Input to choose the proper octave
+    output reg [3:0] note_to_play, // Output to buzzer
+    output reg [6:0] led_out, // LED output
+    output reg [1:0] octave_out, // Output the octave value
+    output wire [3:0] num, // Number output
+    input wire [1:0] speed_select, // Input to select speed
+    output reg [3:0] score, // Output for the score
+    input wire play_state, // Play state signal
+    input wire user, // User input signal
+    output reg [3:0] score_A, // Score for player A
+    output reg [3:0] score_B // Score for player B
 
 );
  parameter second = 10000000, song_time=56,music0=4'b0000,
@@ -48,32 +48,35 @@ module mode_competition(
 parameter song_1=4'd1, song_2=4'd2,song_3=4'd3,song_4=4'd4,song_5=4'd5,song_6=4'd6; 
 parameter speed_mid=2'b01, speed_low=2'b00, speed_high=2'b10;
 
-reg [3:0] song_num=song_1; // on behalf of song
-reg [1:0] num_speed=speed_mid; // on behalf of speed
+// Variables for song and speed control
+reg [3:0] song_num = song_1; // Current song number
+reg [1:0] num_speed = speed_mid; // Current speed setting
 
+// Arrays to store song data
 wire [3:0] song[song_time-1:0];
-wire [song_time*4-1:0] song_packed;
+wire [song_time*4-1:0] song_packed; // Packed array for song data
 
+// Arrays for time continuation and octave data
 wire [song_time*4-1:0] continue;
 wire [3:0] time_continue[song_time-1:0];
 wire [1:0] octave[song_time-1:0];
-wire[song_time*2-1:0] octave_packed;
+wire [song_time*2-1:0] octave_packed; // Packed array for octave data
 
+// Variables to track previous selections
 reg [1:0] prev_song_select;
 reg [1:0] prev_speed_select;
 
+// Variables for playing logic
+integer play_position = 0; // Current position in the song
+integer note_counter = 0; // Counter for note duration
+integer time_mul = 0; // Multiplier for note duration
 
-integer play_position = 0;
-integer note_counter = 0;
-integer time_mul = 0;
-
-
-//about score
-integer right=0;
-integer already = 0;
-integer canstart=1;
-reg [3:0] score_store_A;
-reg [3:0] score_store_B;
+// Variables related to scoring
+integer right = 0; // Number of correct notes
+integer already = 0; // Flag to check if note already counted
+integer canstart = 1; // Flag to control game start
+reg [3:0] score_store_A; // Temporary score storage for player A
+reg [3:0] score_store_B; // Temporary score storage for player B
 
 //choose song logic
 always @(posedge clk) begin
@@ -254,11 +257,11 @@ begin
                     end
 
                 end // begin from the start
-                default: led_out <= led8; // 
+                default: led_out <= led8; 
             endcase
         
     
-
+// Logic to check which note is being played based on switches
     if(switches[0] && !switches[1] && !switches[2] && !switches[3] && !switches[4] && !switches[5] && !switches[6]) begin
         note_to_play <= music1;
     end else
@@ -284,7 +287,7 @@ begin
     end
 
     octave_out <= octave_competition;
-
+// Function to handle scoring logic
     if(already==0)begin
     if(song[play_position]==music0) begin
             if(!switches[0] && !switches[1] && !switches[2] && !switches[3] && !switches[4] && !switches[5] && !switches[6] )begin
