@@ -85,22 +85,25 @@ always @(posedge vga_clk or negedge sys_rst_n) begin
         pix_data <= 12'hFFF; // WHITE (or other color as needed)
     end
 end else begin
+
         // the right 3/10 of the screen is used to display the picture
-        relative_x = pix_x - (H_VALID * 7 / 10);
-        relative_y = pix_y;
+        relative_x <= pix_x - (H_VALID * 7 / 10);
+        relative_y <= pix_y;
+
 
 
         if (num == 4'd1) begin
-            char_width = 32 * 3; // 3 words
+            char_width <= 32 * 3; // 3 words
         end else begin
-            char_width = 32 * 4; // 
+            char_width <= 32 * 4; // 
         end
 
-        max_width = char_width; 
+        max_width <= char_width; 
 
         if (relative_y < 32 && relative_x < max_width) begin
             // calculate the index of the pixel in the picture
-            index = relative_y * max_width + relative_x;
+            index <= relative_y * max_width + relative_x;
+
 
             case (num)
                 4'd1: begin
