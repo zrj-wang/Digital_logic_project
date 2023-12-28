@@ -3,9 +3,9 @@ set_property IOSTANDARD LVCMOS33 [get_ports keys]
 set_property IOSTANDARD LVCMOS33 [get_ports reset]
 set_property IOSTANDARD LVCMOS33 [get_ports speaker]
 set_property IOSTANDARD LVCMOS33 [get_ports start]
+set_property IOSTANDARD LVCMOS33 [get_ports user]
 
 set_property IOSTANDARD LVCMOS33 [get_ports song_select]
-set_property IOSTANDARD LVCMOS33 [get_ports write_on]
 set_property IOSTANDARD LVCMOS33 [get_ports mode]
 set_property IOSTANDARD LVCMOS33 [get_ports octave]
 set_property IOSTANDARD LVCMOS33 [get_ports led]
@@ -23,6 +23,7 @@ set_property PACKAGE_PIN V1 [get_ports speed_select[1]]
 
 set_property PACKAGE_PIN P15 [get_ports reset]
 set_property PACKAGE_PIN R15 [get_ports start]
+set_property PACKAGE_PIN V4 [get_ports user]
 
 set_property PACKAGE_PIN G2 [get_ports an[0]]
 set_property PACKAGE_PIN C2 [get_ports an[1]]
@@ -71,7 +72,6 @@ set_property PACKAGE_PIN P2 [get_ports keys[3]]
 set_property PACKAGE_PIN R2 [get_ports keys[4]]
 set_property PACKAGE_PIN M4 [get_ports keys[5]]
 set_property PACKAGE_PIN N4 [get_ports keys[6]]
-set_property PACKAGE_PIN R1 [get_ports write_on]
 
 
 set_property PACKAGE_PIN P17 [get_ports clk]

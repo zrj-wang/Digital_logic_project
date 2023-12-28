@@ -33,7 +33,10 @@ module mode_competition(
     output wire[3:0] num,
     input wire [1:0] speed_select,
     output reg [3:0] score,
-    input wire play_state
+    input wire play_state,
+    input wire user,
+    output reg [3:0] score_A,
+    output reg [3:0] score_B
 
 );
  parameter second = 10000000, song_time=56,music0=4'b0000,
@@ -66,9 +69,11 @@ integer time_mul = 0;
 
 
 //about score
-integer right;
+integer right=0;
 integer already = 0;
 integer canstart=1;
+reg [3:0] score_store_A;
+reg [3:0] score_store_B;
 
 //choose song logic
 always @(posedge clk) begin
@@ -215,6 +220,11 @@ begin
             already <= 0;
             led_out <=led8;
             note_to_play <=music0;
+            if(user) begin
+            score_A <=score_store_A;
+            end else begin
+            score_B <= score_store_B;
+            end
         end
     end
         //light up led logic
@@ -237,6 +247,11 @@ begin
                     already <= 0;
                     led_out <=led8;
                     note_to_play <=music0;
+                    if(user) begin
+                    score_A <=score_store_A;
+                    end else begin
+                    score_B <= score_store_B;
+                    end
 
                 end // begin from the start
                 default: led_out <= led8; // 
@@ -338,15 +353,35 @@ begin
 
     if(right==play_position)begin
         score <=4'b1000;
+        if(user) begin
+        score_store_A <= score;
+        end else begin
+        score_store_B <= score;
+        end
     end else
     if(3*right > 2*play_position) begin
         score <=4'b0100;
+        if(user) begin
+                score_store_A <= score;
+                end else begin
+                score_store_B <= score;
+                end
     end else
     if(3*right > play_position) begin
         score <=4'b0010;
+        if(user) begin
+                score_store_A <= score;
+                end else begin
+                score_store_B <= score;
+                end
     end else
     begin
         score <=4'b0001;
+        if(user) begin
+                score_store_A <= score;
+                end else begin
+                score_store_B <= score;
+                end
     end
 
 
@@ -354,6 +389,11 @@ begin
         end else begin
             note_to_play <= music0;
             led_out <= led8;
+            if(user) begin
+            score_A <=score_store_A;
+            end else begin
+            score_B <= score_store_B;
+            end
         end
     end else begin
                 // check for song_select[0] and song_select[1] rising edges

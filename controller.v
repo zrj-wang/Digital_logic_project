@@ -36,7 +36,9 @@ module Controller(
     output reg [1:0] octave_out, //octave from auto mode or learn mode
     input wire [1:0] speed_select,
     input wire start,
-    output reg [3:0] score_out
+    output reg [3:0] score_out,
+    input wire user,
+    output reg [3:0] score_user
     );
  parameter mode_free=3'b100, mode_auto=3'b010, mode_learn=3'b001,mode_competition=3'b011;
 
@@ -109,8 +111,15 @@ module Controller(
                        wire [6:0] led_competition;
                        wire [1:0]octave_competition;
                        wire [3:0] score;
+                       wire [3:0] score_final;
+                       wire [3:0] score_A;
+                       wire [3:0] score_B;
+                       
+                       
                        
            mode_competition competition_inst(
+                                      
+                                      .user(user),
                                       .clk(clk),
                                       .switches(keys),
                                       .note_to_play(note_competition),
@@ -122,7 +131,9 @@ module Controller(
                                       .speed_select(speed_select),
                                       .reset(reset), // Assuming mode_learn module has reset input
                                       .score(score),
-                                      .play_state(play_state)
+                                      .play_state(play_state),
+                                      .score_A(score_A),
+                                      .score_B(score_B)
                                   );
           
 
@@ -151,6 +162,11 @@ module Controller(
                 num <= num_competition;
                 octave_out <= octave_competition;
                 score_out <= score;
+                if(user) begin
+                score_user <=score_A;
+                end else begin
+                score_user <=score_B;
+                end
                         end
             default: begin
                 note_out <= 4'b0000;
