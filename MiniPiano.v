@@ -38,7 +38,7 @@ module MiniPiano(
     output wire [3:0] an_right, //control the right seg
 
     input wire[1:0] speed_select, //select the speed of the song
-    
+    input wire user,
 
     output wire test ,
 
@@ -74,9 +74,13 @@ debounce debounce_inst(
     wire [3:0] note;
     wire[1:0] octave_auto;
     wire [3:0] num;
+    wire [3:0] score;
+    wire[3:0] score_user;
     
     //module for controller, control the mode
     Controller controller_inst(
+        .user(user),
+        .score_out(score),
         .clk(clk),
         .keys(keys),
         .write_on(write_on),
@@ -89,7 +93,9 @@ debounce debounce_inst(
         .octave(octave),
         .octave_out(octave_auto),
         .speed_select(debounced_speed_select),
-        .start(debounced_start)
+        .start(debounced_start),
+        .score_user(score_user)
+
 
     );
     
@@ -108,6 +114,9 @@ debounce debounce_inst(
    
 //module for light_seg
     Light_seg light_seg_inst(
+        .user(user),
+        .score_user(score_user),
+        .score(score),
         .num(num),
         .seg1(light_seg),
         .seg(light_seg_left),
@@ -127,7 +136,7 @@ debounce debounce_inst(
     .vga_rgb(vga_rgb),
     .status(led),
     .num(num)
-    )
+    );
 
     // Other modules can be instantiated and connected similarly
 

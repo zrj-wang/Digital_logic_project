@@ -1,5 +1,8 @@
 //input number ,show in seg
 module Light_seg (
+    input wire user,
+    input wire [3:0] score,
+    input wire [3:0] score_user,
     input wire [3:0] num,       // 4-bit input representing the song number
     input wire clk,             // Clock signal
     input wire reset,           // Reset signal
@@ -9,13 +12,17 @@ module Light_seg (
     output reg [3:0] an, // control the left seg
     output reg [3:0] an_right
 );
+
 `include "par.v"
+
 
 reg [7:0] char1, char2, char3, char4;
 reg [1:0] display_select;// 2-bit output for the digit select
 
 reg [7:0] seg_num; // 7-bit output for the segment patterna
-
+reg [7:0] seg_score;
+reg [7:0] seg_score_user;
+reg [7:0] seg_user;
     // Define the segment patterns for numbers 0-9 for a common cathode seven-segment display
     always @(*) begin
         case(num)
@@ -51,6 +58,26 @@ reg [7:0] seg_num; // 7-bit output for the segment patterna
             4'd9: seg_num = num9; // 9
             default: seg_num = 8'b00000000; // Off or invalid input
         endcase
+        case(score)
+            4'b0001:seg_score = c;
+            4'b0010:seg_score = b;
+            4'b0100:seg_score = a;
+            4'b1000:seg_score = s;
+            default: seg_score =8'b00000000;
+        endcase
+        case(score_user)
+                    4'b0001:seg_score_user = c;
+                    4'b0010:seg_score_user = b;
+                    4'b0100:seg_score_user = a;
+                    4'b1000:seg_score_user = s;
+                    default: seg_score_user =8'b00000000;
+                endcase
+         if(user) begin
+         seg_user=a;
+         end else begin
+         seg_user = b;
+         end
+            
     end
 
 
@@ -127,26 +154,63 @@ always @(posedge clk )
             end
             3'b001: begin
 
-                            // Only update outputs when mode is 3'b010
+                            // Only update outputs when mode is 3'b001
                             case(display_select)
-                                2'b00: begin
-                                    seg <= char1;  
-                                    an <= 4'b0001; 
-                                end
-                                2'b01: begin
-                                    seg <= char2;  
-                                    an <= 4'b0010; 
-                                end
-                                2'b10: begin
-                                    seg <= char3;  
-                                    an <= 4'b0100; 
-                                end
-                                2'b11: begin
-                                    seg <= char4;  
-                                    an <= 4'b1000; 
-                                end
-                            endcase
-                        end
+                                                2'b00: begin
+                                                    seg <= char1;
+                                                    seg1<=empty;  
+                                                    an <= 4'b0001;
+                                                    an_right<= 4'b0001; 
+                                                end
+                                                2'b01: begin
+                                                    seg <= char2;
+                                                    seg1<=empty;  
+                                                    an <= 4'b0010; 
+                                                    an_right<= 4'b0010;
+                                                end
+                                                2'b10: begin
+                                                    seg <= char3;
+                                                    seg1<=empty;  
+                                                    an <= 4'b0100;
+                                                    an_right<= 4'b0100;
+                                                end
+                                                2'b11: begin
+                                                    seg <= char4;
+                                                    seg1<=seg_num;  
+                                                    an <= 4'b1000; 
+                                                    an_right<= 4'b1000;
+                                                end
+                                            endcase
+                                        end
+                             3'b011: begin
+                                                       // Only update outputs when mode is 3'b011
+                                                       case(display_select)
+                                                           2'b00: begin
+                                                               seg <= char1;
+                                                               seg1<=seg_user;  
+                                                               an <= 4'b0001;
+                                                               an_right<= 4'b0001; 
+                                                           end
+                                                           2'b01: begin
+                                                               seg <= char2;
+                                                               seg1<=seg_score_user;  
+                                                               an <= 4'b0010; 
+                                                               an_right<= 4'b0010;
+                                                           end
+                                                           2'b10: begin
+                                                               seg <= char3;
+                                                               seg1<=seg_score;  
+                                                               an <= 4'b0100;
+                                                               an_right<= 4'b0100;
+                                                           end
+                                                           2'b11: begin
+                                                               seg <= char4;
+                                                               seg1<=seg_num;  
+                                                               an <= 4'b1000; 
+                                                               an_right<= 4'b1000;
+                                                           end
+                                                       endcase
+                                                   end
             default: begin
                 // Mode is not 3'b010, keep outputs low
                 seg1 <= 8'b00000000;
