@@ -99,9 +99,9 @@ module Controller(
                 .song_select(song_select),
                .led_out(led_learn),
                 .octave_out(octave_learn),
-               .octave_learn(octave), // Assuming octave_learn is the same as octave
-               .num(num_learn), // Assuming mode_learn module provides num output
-               .reset(reset) // Assuming mode_learn module has reset input
+               .octave_learn(octave),
+               .num(num_learn), 
+               .reset(reset) 
            );
            
            
@@ -126,10 +126,10 @@ module Controller(
                                        .song_select(song_select),
                                       .led_out(led_competition),
                                        .octave_out(octave_competition),
-                                      .octave_competition(octave), // Assuming octave_learn is the same as octave
-                                      .num(num_competition), // Assuming mode_learn module provides num output
+                                      .octave_competition(octave), 
+                                      .num(num_competition), 
                                       .speed_select(speed_select),
-                                      .reset(reset), // Assuming mode_learn module has reset input
+                                      .reset(reset), 
                                       .score(score),
                                       .play_state(play_state),
                                       .score_A(score_A),
