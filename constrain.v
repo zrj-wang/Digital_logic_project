@@ -4,6 +4,9 @@ set_property IOSTANDARD LVCMOS33 [get_ports reset]
 set_property IOSTANDARD LVCMOS33 [get_ports speaker]
 set_property IOSTANDARD LVCMOS33 [get_ports start]
 set_property IOSTANDARD LVCMOS33 [get_ports user]
+set_property IOSTANDARD LVCMOS33 [get_ports write_on]
+
+
 
 set_property IOSTANDARD LVCMOS33 [get_ports song_select]
 set_property IOSTANDARD LVCMOS33 [get_ports mode]
@@ -25,6 +28,7 @@ set_property IOSTANDARD LVCMOS33 [get_ports vsync]
 set_property IOSTANDARD LVCMOS33 [get_ports vga_rgb]
 
 
+set_property PACKAGE_PIN R1 [get_ports write_on]
 set_property PACKAGE_PIN D7 [get_ports hsync]
 set_property PACKAGE_PIN C4 [get_ports vsync]
 

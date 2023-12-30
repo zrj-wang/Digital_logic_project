@@ -20,7 +20,7 @@ parameter do=381680, re=340136, mi=303030, fa=285714, so=255102, la=227273, si=2
  music1=4'b0001, music2=4'b0010,music3=4'b0011,music4=4'b0100,music5=4'b0101,
  music6=4'b0110,music7=4'b0111,music9=4'b1111,
  led1=7'b0000001,led2=7'b0000010,led3=7'b0000100,led4=7'b0001000,led5=7'b0010000,
- led6=7'b0100000,led7=7'b1000000,led8=7'b0000000;
+ led6=7'b0100000,led7=7'b1000000,led8=7'b0000000,led_for_delete=7'b1111111;
 
 parameter s=8'b01001001,tt=8'b00001111,a=8'b01110111,r=8'b01000110;
 parameter b=8'b00011111,d=8'b00111101,y=8'b00111011;
@@ -31,7 +31,10 @@ parameter num8=8'b01111111,num9=8'b01111011;   //{dot,a,b,c,d,e,f,g}
 parameter empty=8'b00000000;
 
 
-
+    parameter Note_WIDTH = 4;  
+    parameter Octave_WIDTH = 2;  
+    parameter RAM_DEPTH = 10; 
+    parameter ADDR_WIDTH = 10;  
 
 
         parameter score1=4'b0001,

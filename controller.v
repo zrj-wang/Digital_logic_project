@@ -40,21 +40,18 @@ module Controller(
     input wire user,
     output reg [3:0] score_user
     );
+`include "par.v"
 
 
 
-    wire[3:0]note_free;
-    wire[1:0]octave_free;
-//    mode_free free_inst(
-//    .clk(clk),
-//    .reset(reset),
-//    .write_on(write_on),
-//    .keys(keys),
-//    .song_select(song_select),
-//    .note_to_play(note_free),
-//    .octave(octave),
-//    .octave_out(octave_free)
-//    );
+wire[3:0]note_free1;
+    wire[1:0]octave_free1;
+    wire[3:0]note_free2;
+    wire[1:0]octave_free2;
+    wire [6:0] led_free1;
+    wire [6:0] led_free2;
+        
+
 
 
 //use wire to connect mode, then choose which mode we will use
@@ -137,21 +134,74 @@ module Controller(
                                       .score_A(score_A),
                                       .score_B(score_B)
                                   );
+                                  
+                                  
+    mode_free free_inst(
+    .clk(clk),
+    .reset(reset),
+    .write_on(write_on),
+    .storeRecord(start),
+    .keys(keys),
+    .octave(octave),
+    .selectSong(num_auto),
+    .led_out1(led_free1),
+     .led_out2(led_free2),
+    .note_to_play1(note_free1),
+    .octave_out1(octave_free1),
+    .note_to_play2(note_free2),
+    .octave_out2(octave_free2)
+    );
+
           
 
 // choose the mode
     always @(posedge clk) begin
         case(mode)
-//            mode_free: begin
-//               note_out<=note_free;
-//                octave_out<=octave_free;
-//            end
-            mode_auto: begin
+            // mode_free: begin
+            //            note_out<=note_free1;
+            //             octave_out<=octave_free1;
+            //             led_out<=led_free;
+            //         end
+             mode_free: begin
+               note_out<=note_free1;
+                octave_out<=octave_free1;
+                led_out<=led_free1;  
+            end
+        mode_auto: begin
+            case(num_auto)
+              4'b0100,4'b0101,4'b0110:
+                begin note_out <= note_free2;
+                  led_out <= led_free2;  
+                   num <=num_auto;
+                  octave_out <= octave_free2;
+                   end
+                default begin             
+                num <=num_auto;              
                 note_out <= note_auto;
                 led_out <= led_auto;
-                num <=num_auto;
                 octave_out <= octave_auto;
+                end
+                endcase
             end
+
+            // mode_auto: begin
+            //             case(num_auto)
+            //              4'b0100,4'b0101,4'b0110:
+            //            begin note_out <= note_free2;
+            //                  led_out <= led_free;
+            //                   num <=num_auto;
+            //                  octave_out <= octave_free2;
+            //                   end
+            //         default begin             
+            //                num <=num_auto;              
+            //                note_out <= note_auto;
+            //                led_out <= led_auto;
+            //                octave_out <= octave_auto;
+            //                end
+            //                endcase
+            //            end  
+                       
+                               
             mode_learn: begin
                 note_out <= note_learn;
                 led_out <= led_learn;
